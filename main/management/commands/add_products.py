@@ -11,4 +11,7 @@ class Command(BaseCommand):
         product2 = ProductEntry(name="Smartphone", price=800, description="A latest model smartphone.")
         product2.save()
 
+        product3 = ProductEntry(name="Computer", price=1000, description="A latest model computer.")
+        product3.save()
+
         self.stdout.write(self.style.SUCCESS('Successfully added products'))
