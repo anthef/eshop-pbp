@@ -1,6 +1,18 @@
-<h5>NPM: </h5>
-<p>{{ npm }}<p>
-<h5>Name: </h5>
-<p>{{ name }}<p>
-<h5>Class: </h5>
-<p>{{ class }}<p>
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Main Page</title>
+</head>
+<body>
+    <h1>Welcome, {{ name }}</h1>
+    <p>NPM: {{ npm }}</p>
+    <p>Class: {{ class }}</p>
+
+    <h2>Product List</h2>
+    <ul>
+        {% for product in products %}
+            <li>{{ product.name }} - ${{ product.price }}<br>{{ product.description }}</li>
+        {% endfor %}
+    </ul>
+</body>
+</html>
