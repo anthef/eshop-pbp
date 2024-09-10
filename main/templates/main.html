@@ -4,14 +4,16 @@
     <title>Main Page</title>
 </head>
 <body>
-    <h1>Welcome, {{ name }}</h1>
+    <h1>Welcome to {{ shop_name }} by {{ name }}</h1>
     <p>NPM: {{ npm }}</p>
     <p>Class: {{ class_name }}</p> 
 
     <h2>Product List</h2>
     <ul>
-        {% for product in products %}
-            <li>{{ product.name }} - ${{ product.price }}<br>{{ product.description }}</li>
+        {% for pr in products %}
+        <p>
+            <li>{{ pr.name }} - ${{ pr.price }}<br>{{ pr.description }}</li>
+        </p>
         {% endfor %}
     </ul>
 </body>
