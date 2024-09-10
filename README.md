@@ -148,7 +148,7 @@ Tautan aplikasi PWS: [http://anthony-edbert-eshoppbp.pbp.cs.ui.ac.id](http://ant
 2. **Buatlah bagan yang berisi request client ke web aplikasi berbasis Django beserta responnya dan jelaskan pada bagan tersebut kaitan antara `urls.py`, `views.py`, `models.py`, dan berkas `html`.**
 
     **Jawab:**
-    ![Django Flow Chart](./flow_chart.jpg)
+    ![Django Flow Chart](https://github.com/anthef/eshop-pbp/blob/main/flow_chart/flow_chart.jpg)
     
     Dalam aplikasi web Django, ketika seorang user mengirimkan request melalui browser, permintaan tersebut diterima oleh server dan pertama-tama dipetakan ke file `urls.py`. Di sini, Django memeriksa pola URL yang telah didefinisikan untuk menentukan ke mana request tersebut harus diarahkan. Biasanya, request tersebut akan diteruskan ke fungsi atau kelas yang sesuai di dalam `views.py`. `views.py` bertanggung jawab untuk menjalankan logika aplikasi, termasuk memutuskan apakah perlu berinteraksi dengan database melalui `models.py`. Jika interaksi dengan database diperlukan, seperti membaca atau menulis data, `views.py` akan mengakses `models.py` untuk melakukannya. Setelah semua proses selesai, `views.py` akan merender template yang terdiri dari file HTML, CSS, dan JavaScript untuk menampilkan antarmuka pengguna (UI).
 
