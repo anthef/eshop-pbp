@@ -1,5 +1,6 @@
 from django.db import models
 
+#model for product entry
 class ProductEntry(models.Model):
     name = models.CharField(max_length=255)
     price = models.IntegerField()
