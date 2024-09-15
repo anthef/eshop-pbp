@@ -1,3 +1,5 @@
+{% extends 'base.html' %}
+{% block content %}
 <!DOCTYPE html>
 <html>
 <head>
@@ -8,13 +10,40 @@
     <p>NPM: {{ npm }}</p>
     <p>Class: {{ class_name }}</p> 
 
-    <h2>Product List</h2>
-    <ul>
-        {% for pr in products %}
-        <p>
-            <li>{{ pr.name }} - ${{ pr.price }}<br>{{ pr.description }}</li>
-        </p>
-        {% endfor %}
-    </ul>
+    {% if not product_entry %}
+    <p>Belum ada data product pada AyoBelanja.</p>
+    {% else %}
+    <table>
+    <tr>
+        <th>Product Name</th>
+        <th>Time</th>
+        <th>Description</th>
+        <th>Price</th>
+        <th>Actions</th>
+    </tr>
+
+    {% for product in product_entry %}
+    <tr>
+        <td>{{ product.name }}</td>
+        <td>{{ product.time }}</td>
+        <td>{{ product.description }}</td>
+        <td>{{ product.price }}</td>
+        <td>
+            <form action="{% url 'main:delete_product_entry' product.id %}" method="POST" style="display:inline;">
+                {% csrf_token %}
+                <button type="submit">Delete</button>
+            </form>
+        </td>
+    </tr>
+    {% endfor %}
+    </table>
+    {% endif %}
+
+    <br />
+
+    <a href="{% url 'main:create_name_entry' %}">
+        <button>Add New Product Entry</button>
+    </a>
 </body>
 </html>
+{% endblock content %}
