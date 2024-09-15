@@ -219,6 +219,16 @@ Tautan aplikasi PWS: [http://anthony-edbert-ayobelanja.pbp.cs.ui.ac.id](http://a
 
     **Jawab:**
 
+    Menurut saya, dalam hal format pertukaran data yang umum digunakan, saya memilih JSON untuk digunakan. Banyak aspek yang memengaruhi JSON lebih populer dari XML, seperti:
+
+    - **Kesederhanaan** JSON memiliki sintaks yang lebih sederhana. Tidak seperti XML, JSON tidak memerlukan suatu tag pembuka ataupun penutup. Dari segi struktur, JSON memiliki struktur yang mirip dengan object dan array dalam JavaScript
+    - **Ukuran File** JSON umumnya menghasilkan file dengan ukuran lebih kecil dbandingkan XML karena tidak memerlukan tag penutup
+    - **Parsing yang lebih cepat** JSON dapat di parse menjadi objek JavaScript dengan sangat cepat
+    - **Struktur data yang lebih fleksibel** JSON mendukung tipe data, seperti array dan object nested dengan lebih alami
+    - **Popularisasi dalam API** Banyak API yang menggunakan JSON karena kemudahan dalam penggunaanya
+
+    Walaupun XML menawarkan beberapa fitur tambahan seperti mendukung namespace dan skema yang lebih kuat untuk validasi, JSON lebih populer karena lebih ringkas dan mudah dalam pengimplementasiannya.
+    
 3. **Jelaskan fungsi dari method `is_valid()` pada form Django dan mengapa kita membutuhkan method tersebut?**
 
     **Jawab:**
