@@ -208,6 +208,30 @@ Tautan aplikasi PWS: [http://anthony-edbert-ayobelanja.pbp.cs.ui.ac.id](http://a
 ![JSON_ID](https://github.com/anthef/eshop-pbp/blob/main/screenshot_post/json_id.png)
 ![XML_ID](https://github.com/anthef/eshop-pbp/blob/main/screenshot_post/xml_id.png)
 
+## Pertanyaan dan Jawaban 
+1. **Jelaskan mengapa kita memerlukan data delivery dalam pengimplementasian sebuah platform?**
+
+    **Jawab:**
+    
+    Data delivery sudah menjadi pondasi vital dalam pengimplementasian sebuah plaform. Data delivery berfungsi sebagai jembatan ataupun infrastruktur yang memungkinkan berbagai elemen platform untuk berkomunikasi secara seamless. Data pada berbagai elemen, seperti dari server ke klien ataupun sebaliknya, dari database ke user interface dapat mengalir dengan lancar, aman, dan tepat waktu. Tanpa adanya data delivery, maka setiap elemen pada platform akan terisolasi. Hal itu menyebabkan fungsionalitas dari suatu platform akan menjadi tidak sesuai harapan. Selain itu, data delivery yang baik dapat meningkatkan skalabilitas dan memungkinkan platform untuk beradaptasi dengan cepat dengan perubahan kebutuhan dan menangani lonjakan lalu lintas data.
+
+2. **Menurutmu, mana yang lebih baik antara XML dan JSON? Mengapa JSON lebih populer dibandingkan XML?**
+
+    **Jawab:**
+
+3. **Jelaskan fungsi dari method `is_valid()` pada form Django dan mengapa kita membutuhkan method tersebut?**
+
+    **Jawab:**
+
+4.  **Mengapa kita membutuhkan `csrf_token` saat membuat form di Django? Apa yang dapat terjadi jika kita tidak menambahkan `csrf_token` pada form Django? Bagaimana hal tersebut dapat dimanfaatkan oleh penyerang?**
+
+    **Jawab:**
+
+5. **Jelaskan bagaimana cara kamu mengimplementasikan checklist di atas secara step-by-step (bukan hanya sekadar mengikuti tutorial).**
+
+    **Jawab:**
+
+
 ## Checklist Tugas
 - [x] Membuat input `form` untuk menambahkan objek model pada app sebelumnya.
 - [x] Tambahkan 4 fungsi `views` baru untuk melihat objek yang sudah ditambahkan dalam format XML, JSON, XML by ID, dan JSON by ID.
