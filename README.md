@@ -202,12 +202,6 @@ Tautan aplikasi PWS: [http://anthony-edbert-ayobelanja.pbp.cs.ui.ac.id](http://a
 
 # Tugas 3
 
-## Screenshot Postman
-![JSON](https://github.com/anthef/eshop-pbp/blob/main/screenshot_post/json.png)
-![XML](https://github.com/anthef/eshop-pbp/blob/main/screenshot_post/xml.png)
-![JSON_ID](https://github.com/anthef/eshop-pbp/blob/main/screenshot_post/json_id.png)
-![XML_ID](https://github.com/anthef/eshop-pbp/blob/main/screenshot_post/xml_id.png)
-
 ## Pertanyaan dan Jawaban 
 1. **Jelaskan mengapa kita memerlukan data delivery dalam pengimplementasian sebuah platform?**
 
@@ -240,10 +234,39 @@ Tautan aplikasi PWS: [http://anthony-edbert-ayobelanja.pbp.cs.ui.ac.id](http://a
 
     **Jawab:**
 
+    Cross-Site Request Forgery Token merupakan suatu token untuk melindungi aplikasi dari serangan Cross Site Request Forgery. Dengan adanya `csrf_token`, dapat memastikan bahwa request POST berasal dari situs yang sah dan mencegah modifikasi data yang tidak sah melalui request palsu. Tanpa adanya `csrf_token`, penyerang akan membuat suatu request palsu menggunakan nama pengguna yang sudah terotentikasi, mengubah data-data sensitif, ataupun informasi pribadi pengguna bisa terekspos dan termanipulasi.
+
+    Jika suatu website tidak memiliki `csrf_token`, maka penyerang akan membuat situs web berbahaya atau memodifikasi situ yang sudah ada. Lalu, pengguna yang sudah login ke aplikasi Django akan tanpa sadar mengakses situs berbahaya tersebut. Setelah itu, situs berbahaya akan memuat form tersembunyi yang mengirim request ke aplikasi Django. Setelah itu, penyerang akan memanfaatkan cookies sesi yang valid dari pengguna. Request palsu akan terlihat sah karena berasal dari browser pengguna yang sudah terotentikasi. Tanpa adanya `csrf_token`, server tidak dapat membedakan request yang sah dan yang palsu. 
+
+    Django menghasilkan token unik untuk setiap sesi pengguna. Token ini disertakan dalam setiap form sebagai field tersembunyi. Saat form disubmit, Django akan memeriksa kecocokan token. Jika token berbeda, maka request akan ditolak. Dengan itu, keamanan website akan terjaga.
+
+
 5. **Jelaskan bagaimana cara kamu mengimplementasikan checklist di atas secara step-by-step (bukan hanya sekadar mengikuti tutorial).**
 
     **Jawab:**
+    1. Membuat `base.html` untuk menjadi page utama dalam website
+    ```python
+    {% load static %}
+    <!DOCTYPE html>
+    <html lang="en">
+        <head>
+            <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            {% block meta %} {% endblock meta %}
+        </head>
+        <body>
+            {% block content %} {% endblock content %}
+        </body>
+    </html>
+    ```
+    
+    2.
 
+## Screenshot Postman
+![JSON](https://github.com/anthef/eshop-pbp/blob/main/screenshot_post/json.png)
+![XML](https://github.com/anthef/eshop-pbp/blob/main/screenshot_post/xml.png)
+![JSON_ID](https://github.com/anthef/eshop-pbp/blob/main/screenshot_post/json_id.png)
+![XML_ID](https://github.com/anthef/eshop-pbp/blob/main/screenshot_post/xml_id.png)
 
 ## Checklist Tugas
 - [x] Membuat input `form` untuk menambahkan objek model pada app sebelumnya.
