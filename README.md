@@ -259,8 +259,187 @@ Tautan aplikasi PWS: [http://anthony-edbert-ayobelanja.pbp.cs.ui.ac.id](http://a
         </body>
     </html>
     ```
+
+    2. Menambahkan `BASE_DIR` pada `settings.py` agar project mengenali html yang akan menjadi template utama
+    ```python
+    'DIRS': [BASE_DIR / 'templates'],
+    ```
+
+    3. Menambahkan atribut `time` dan `id` pada model product
+    ```python
+    from django.db import models
+    import uuid
+
+    class ProductEntry(models.Model):
+        id = models.UUIDField(primary_key=True,default = uuid.uuid4, editable=False)
+        name = models.CharField(max_length=255)
+        price = models.IntegerField()
+        description = models.TextField()
+        time = models.DateField(auto_now_add=True)
+
+        def __str__(self):
+            return self.name
+    ```
+
+    4. Membuat `forms.py` untuk mendeklarasikan atribut-atribut dari model yang membutuhkan input dari user
+    ```python
+    from django.forms import ModelForm
+    from .models import ProductEntry
+
+    class ProductEntryForm(ModelForm):
+        class Meta:
+            model = ProductEntry
+            fields=['name','price','description']
+    ```
+
+    5. Membuat method `create_name_entry` untuk mengambil input user sesuai dengan `forms.py`
+    ```python
+    def create_name_entry(request):
+        form = ProductEntryForm(request.POST or None)
+        if form.is_valid() and request.method == 'POST':
+            form.save()
+            return redirect('main:show_main')
+        context={'form':form}
+        return render(request,'create_name_entry.html',context)
+    ```
+
+    6. Membuat method `show_main` untuk menampilkannya di `main.html`
+    ```python
+    def show_main(request):
+        products = ProductEntry.objects.all()
+
+        context = {
+            'npm': '2306165654',
+            'name': 'Anthony Edbert Feriyanto',
+            'class_name': 'PBP C',
+            'shop_name':'Ayo Belanja',  
+            'product_entry' : products
+        }
+
+        return render(request, "main.html", context)
+    ```
+
+    7. Membuat method `delete_product_entry` untuk menghapus input yang sudah masuk ke database sesuai dengan keinginan pengguna
+    ```python
+    def delete_product_entry(request, id):
+        if request.method == 'POST':
+            product = get_object_or_404(ProductEntry, id=id)
+            product.delete()
+            return redirect('main:show_main')
+        return redirect('main:show_main')
+    ```
+
+    8. Membuat `show_xml`, `show_json`, `show_xml_by_id`, `show_json_by_id` untuk menampilkan response back dari input user
+    ```python
+    def show_xml(request):
+        data = ProductEntry.objects.all()
+        return HttpResponse(serializers.serialize("xml",data),content_type='application/xml')
+
+    def show_json(request):
+        data = ProductEntry.objects.all()
+        return HttpResponse(serializers.serialize("json",data),content_type='application/json')
+
+    def show_xml_by_id(request, id):
+        data = ProductEntry.objects.filter(pk=id)
+        return HttpResponse(serializers.serialize("xml", data), content_type="application/xml")
+
+    def show_json_by_id(request, id):
+        data = ProductEntry.objects.filter(pk=id)
+        return HttpResponse(serializers.serialize("json", data), content_type="application/json")
+    ```
+
+    9. Melakukan routing di dari method yang sudah dibuat di `urls.py`
+    ```python
+    from django.urls import path
+    from main.views import show_main,create_name_entry,show_xml,show_json,show_xml_by_id,show_json_by_id,delete_product_entry
+
+    app_name = 'main'
+
+    urlpatterns = [
+        path('', show_main, name='show_main'),
+        path('create-name-entry', create_name_entry, name='create_name_entry'),
+        path('xml/',show_xml,name='show_xml'),
+        path('json/',show_json,name='show_json'),
+        path('xml/<str:id>/', show_xml_by_id, name='show_xml_by_id'),
+        path('json/<str:id>/', show_json_by_id, name='show_json_by_id'),
+        path('delete/<uuid:id>/', delete_product_entry, name='delete_product_entry'),
+        ]
+    ```
+
+    10. Membuat `create_name_entry.html` untuk tampilan ketika web ingin meminta input dari pengguna
+    ```python
+    {% extends 'base.html' %} 
+    {% block content %}
+    <h1>Add Product Entry</h1>
+
+    <form method="POST">
+    {% csrf_token %}
+    <table>
+        {{ form.as_table }}
+        <tr>
+        <td></td>
+        <td>
+            <input type="submit" value="Add Product Entry" />
+        </td>
+        </tr>
+    </table>
+    </form>
+
+    {% endblock %}
+    ```
     
-    2.
+    11. Membuat `main.html` untuk menampilkan product dari hasil input pengguna
+    ```python
+        {% extends 'base.html' %}
+        {% block content %}
+        <!DOCTYPE html>
+        <html>
+        <head>
+            <title>Main Page</title>
+        </head>
+        <body>
+            <h1>Welcome to {{ shop_name }} by {{ name }}</h1>
+            <p>NPM: {{ npm }}</p>
+            <p>Class: {{ class_name }}</p> 
+
+            {% if not product_entry %}
+            <p>Belum ada data product pada AyoBelanja.</p>
+            {% else %}
+            <table>
+            <tr>
+                <th>Product Name</th>
+                <th>Time</th>
+                <th>Description</th>
+                <th>Price</th>
+                <th>Actions</th>
+            </tr>
+
+            {% for product in product_entry %}
+            <tr>
+                <td>{{ product.name }}</td>
+                <td>{{ product.time }}</td>
+                <td>{{ product.description }}</td>
+                <td>{{ product.price }}</td>
+                <td>
+                    <form action="{% url 'main:delete_product_entry' product.id %}" method="POST" style="display:inline;">
+                        {% csrf_token %}
+                        <button type="submit">Delete</button>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+            </table>
+            {% endif %}
+
+            <br />
+
+            <a href="{% url 'main:create_name_entry' %}">
+                <button>Add New Product Entry</button>
+            </a>
+        </body>
+        </html>
+        {% endblock content %}
+    ```
 
 ## Screenshot Postman
 ![JSON](https://github.com/anthef/eshop-pbp/blob/main/screenshot_post/json.png)
