@@ -3,8 +3,8 @@ E-commerce terbaik untuk segala kalangan umur
 
 - [Profile](#profile)
 - [Deployment](#deployment)
-- [Pertanyaan dan Jawaban](#pertanyaan-dan-jawaban)
-- [Checklist Tugas](#checklist-tugas)
+- [Tugas 2](#tugas-2)
+- [Tugas 3](#tugas-3)
 
 ## Profile
 
@@ -16,6 +16,7 @@ Kelas   : PBP C
 
 Tautan aplikasi PWS: [http://anthony-edbert-ayobelanja.pbp.cs.ui.ac.id](http://anthony-edbert-eshoppbp.pbp.cs.ui.ac.id)
 
+# Tugas 2
 ## Pertanyaan dan Jawaban
 
 1. **Jelaskan bagaimana cara kamu mengimplementasikan checklist di atas secara step-by-step (bukan hanya sekadar mengikuti tutorial).**
@@ -198,3 +199,18 @@ Tautan aplikasi PWS: [http://anthony-edbert-ayobelanja.pbp.cs.ui.ac.id](http://a
   - Jelaskan fungsi `git` dalam pengembangan perangkat lunak!
   - Menurut Anda, dari semua framework yang ada, mengapa framework Django dijadikan permulaan pembelajaran pengembangan perangkat lunak?
   - Mengapa model pada Django disebut sebagai _ORM_?
+
+# Tugas 3
+
+## Checklist Tugas
+- [x] Membuat input `form` untuk menambahkan objek model pada app sebelumnya.
+- [x] Tambahkan 4 fungsi `views` baru untuk melihat objek yang sudah ditambahkan dalam format XML, JSON, XML by ID, dan JSON by ID.
+- [x] Membuat routing URL untuk masing-masing `views` yang telah ditambahkan pada poin 2.
+- [x] Menjawab beberapa pertanyaan berikut pada `README.md` pada root folder.
+  - [x] Jelaskan mengapa kita memerlukan data delivery dalam pengimplementasian sebuah platform?
+  - [x] Menurutmu, mana yang lebih baik antara XML dan JSON? Mengapa JSON lebih populer dibandingkan XML?
+  - [x] Jelaskan fungsi dari method `is_valid()` pada form Django dan mengapa kita membutuhkan method tersebut?
+  - [x] Mengapa kita membutuhkan `csrf_token` saat membuat form di Django? Apa yang dapat terjadi jika kita tidak menambahkan `csrf_token` pada form Django? Bagaimana hal tersebut dapat dimanfaatkan oleh penyerang?
+  - [x] Jelaskan bagaimana cara kamu mengimplementasikan checklist di atas secara step-by-step (bukan hanya sekadar mengikuti tutorial).
+-  [x] Mengakses keempat URL di poin 2 menggunakan Postman, membuat screenshot dari hasil akses URL pada Postman, dan menambahkannya ke dalam `README.md`.
+- [x] Melakukan `add`-`commit`-`push` ke GitHub.
