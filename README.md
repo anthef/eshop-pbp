@@ -202,6 +202,12 @@ Tautan aplikasi PWS: [http://anthony-edbert-ayobelanja.pbp.cs.ui.ac.id](http://a
 
 # Tugas 3
 
+## Screenshot Postman
+![JSON](https://github.com/anthef/eshop-pbp/blob/main/screenshot_post/json.png)
+![XML](https://github.com/anthef/eshop-pbp/blob/main/screenshot_post/xml.png)
+![JSON_ID](https://github.com/anthef/eshop-pbp/blob/main/screenshot_post/json_id.png)
+![XML_ID](https://github.com/anthef/eshop-pbp/blob/main/screenshot_post/xml_id.png)
+
 ## Checklist Tugas
 - [x] Membuat input `form` untuk menambahkan objek model pada app sebelumnya.
 - [x] Tambahkan 4 fungsi `views` baru untuk melihat objek yang sudah ditambahkan dalam format XML, JSON, XML by ID, dan JSON by ID.
