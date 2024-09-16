@@ -442,10 +442,13 @@ Tautan aplikasi PWS: [http://anthony-edbert-ayobelanja.pbp.cs.ui.ac.id](http://a
     ```
 
 ## Screenshot Postman
-![JSON](https://github.com/anthef/eshop-pbp/blob/main/screenshot_post/json.png)
-![XML](https://github.com/anthef/eshop-pbp/blob/main/screenshot_post/xml.png)
-![JSON_ID](https://github.com/anthef/eshop-pbp/blob/main/screenshot_post/json_id.png)
-![XML_ID](https://github.com/anthef/eshop-pbp/blob/main/screenshot_post/xml_id.png)
+| Response   | Screenshot |
+|------------|------------|
+| JSON       | ![JSON](https://github.com/anthef/eshop-pbp/blob/main/screenshot_post/json.png) |
+| XML        | ![XML](https://github.com/anthef/eshop-pbp/blob/main/screenshot_post/xml.png) |
+| JSON_ID    | ![JSON_ID](https://github.com/anthef/eshop-pbp/blob/main/screenshot_post/json_id.png) |
+| XML_ID     | ![XML_ID](https://github.com/anthef/eshop-pbp/blob/main/screenshot_post/xml_id.png) |
+
 
 ## Checklist Tugas
 - [x] Membuat input `form` untuk menambahkan objek model pada app sebelumnya.
