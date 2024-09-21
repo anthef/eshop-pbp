@@ -5,6 +5,7 @@ E-commerce terbaik untuk segala kalangan umur
 - [Deployment](#deployment)
 - [Tugas 2](#tugas-2)
 - [Tugas 3](#tugas-3)
+- [Tugas 4](#tugas-4)
 
 ## Profile
 
@@ -462,3 +463,6 @@ Tautan aplikasi PWS: [http://anthony-edbert-ayobelanja.pbp.cs.ui.ac.id](http://a
   - [x] Jelaskan bagaimana cara kamu mengimplementasikan checklist di atas secara step-by-step (bukan hanya sekadar mengikuti tutorial).
 -  [x] Mengakses keempat URL di poin 2 menggunakan Postman, membuat screenshot dari hasil akses URL pada Postman, dan menambahkannya ke dalam `README.md`.
 - [x] Melakukan `add`-`commit`-`push` ke GitHub.
+
+# Tugas 4
+## Pertanyaan dan Jawaban
