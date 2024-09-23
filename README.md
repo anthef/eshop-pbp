@@ -529,7 +529,7 @@ Tautan aplikasi PWS: [http://anthony-edbert-ayobelanja.pbp.cs.ui.ac.id](http://a
     Namun, autentikasi berbeda dari otorisasi. Autentikasi hanya memverifikasi siapa pengguna tersebut, sedangkan otorisasi adalah proses yang menentukan apa saja yang diizinkan untuk dilakukan oleh pengguna tersebut setelah berhasil terautentikasi. Misalnya, setelah login (autentikasi), pengguna mungkin diizinkan (otorisasi) untuk mengakses halaman profil mereka, tetapi mereka mungkin tidak diizinkan untuk mengakses halaman administratif yang hanya dapat diakses oleh pengguna dengan hak istimewa tertentu.
 
     Django Implementation :
-    Authentication di Django ditangani melalui sistem otentikasi bawaan (`django.contrib.auth`). Built-in sistem tersebut akan memverifikasi kredensial pengguna menggunakan metode seperti `authenticate()` dan ``login()`.
+    Authentication di Django ditangani melalui sistem otentikasi bawaan (`django.contrib.auth`). Built-in sistem tersebut akan memverifikasi kredensial pengguna menggunakan metode seperti `authenticate()` dan `login()`.
 
     Authorization dikelola melalui izin dan grup. Setelah otentikasi, Django memeriksa izin pengguna (misalnya, menggunakan `user.has_perm()`) untuk menentukan apakah mereka berwenang untuk melakukan tindakan tertentu.
 
@@ -556,7 +556,134 @@ Tautan aplikasi PWS: [http://anthony-edbert-ayobelanja.pbp.cs.ui.ac.id](http://a
 
     **Jawab:**
 
+    1. Membuat form register menggunakan `UserCreationForm` dari `django.contrib.auth.forms` di `views.py` aplikasi `main`
+    ```python
+    def register(request):
+        form = UserCreationForm()
+        if request.method == "POST":
+            form = UserCreationForm(request.POST)
+            if form.is_valid():
+                form.save()
+                messages.success(request, 'Your account has been successfully created!')
+                return redirect('main:login')
+        context = {'form':form}
+        return render(request, 'register.html', context)
+    ```
 
+    2. Membuat page HTML sederhananya untuk `register.html` di dalam direktori `templates/main`
+    ```python
+    {% extends 'base.html' %}
+    {% block meta %}
+    <title>Register</title>
+    {% endblock meta %}
+    {% block content %}
+    <div class="login">
+    <h1>Register</h1>
+    <form method="POST">
+        {% csrf_token %}
+        <table>
+        {{ form.as_table }}
+        <tr>
+            <td></td>
+            <td><input type="submit" name="submit" value="Daftar" /></td>
+        </tr>
+        </table>
+    </form>
+    {% if messages %}
+    <ul>
+        {% for message in messages %}
+        <li>{{ message }}</li>
+        {% endfor %}
+    </ul>
+    {% endif %}
+    </div>
+    {% endblock content %}
+    ```
+
+    3. Menambahkan function `urls.py`
+    ```python
+    path('register/', register, name='register'),
+    ```
+
+    4. Membuat form login menggunakan `AuthenticationForms` dari `django.contrib.auth.forms` dan method `authenticate` dan `login` dari `django.contrib.auth` di `views.py` aplikasi `main`.
+    ```python
+    def login_user(request):
+        if request.method == 'POST':
+            form = AuthenticationForm(data=request.POST)
+            if form.is_valid():
+                user = form.get_user()  
+                if user is not None:
+                    login(request, user)
+                    response = HttpResponseRedirect(reverse("main:show_main"))
+                    response.set_cookie('last_login', str(datetime.datetime.now()))
+                    return response
+        else:
+            form = AuthenticationForm()
+        context = {"form": form}
+        return render(request, "login.html", context)
+    ```
+
+    Saat ini saya melakukan set cookie `last_login` dengan waktu saat ketika `user` berhasil login dengan menggunakan library `datetime`.
+
+    5. Membuat page HTML baru untuk form, yaitu `login.html` di dalam aplikasi `main`.
+    ```python
+    {% extends 'base.html' %}
+    {% block meta %}
+    <title>Login</title>
+    {% endblock meta %}
+
+    {% block content %}
+    <div class="login">
+    <h1>Login</h1>
+
+    <form method="POST" action="">
+        {% csrf_token %}
+        <table>
+        {{ form.as_table }}
+        <tr>
+            <td></td>
+            <td><input class="btn login_btn" type="submit" value="Login" /></td>
+        </tr>
+        </table>
+    </form>
+
+    {% if messages %}
+    <ul>
+        {% for message in messages %}
+        <li>{{ message }}</li>
+        {% endfor %}
+    </ul>
+    {% endif %} Don't have an account yet?
+    <a href="{% url 'main:register' %}">Register Now</a>
+    </div>
+
+    {% endblock content %}
+    ```
+
+    6. Menambahkan `urls.py` untuk `login`
+    ```python
+    path('login/', login_user, name='login'),   
+    ```
+
+    7. Membuat method `logout_user`
+    ```python
+    def logout_user(request):
+        logout(request)
+        response = HttpResponseRedirect(reverse('main:login'))
+        response.delete_cookie('last_login')
+        print("Logout successful, redirecting to login page") 
+        return response
+    ```
+
+    8. Menambahkan pada `urls.py`
+    path('logout/', logout_user, name='logout_user'),
+
+    9.'Menambahkan button `logout` pada `mzin.html`
+
+    10. Menambahkam baris pada `show_main`
+    ```python
+    products = Product.objects.filter(user=req.user)
+    ```
 
 ## Checklist Tugas
 - [x] Mengimplementasikan fungsi registrasi, login, dan logout untuk memungkinkan pengguna untuk mengakses aplikasi sebelumnya dengan lancar.
