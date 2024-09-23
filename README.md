@@ -537,10 +537,24 @@ Tautan aplikasi PWS: [http://anthony-edbert-ayobelanja.pbp.cs.ui.ac.id](http://a
 
     **Jawab:**
 
+    Django mengingat pengguna yang telah login melalui session-based authentication. Setelah pengguna berhasil login, Django menciptakan sesi yang menyimpan status autentikasi pengguna. Sesi ini diidentifikasi oleh session ID yang disimpan di dalam cookie pada browser pengguna. Setiap kali pengguna berinteraksi dengan server, cookie yang mengandung session ID dikirimkan kembali ke server. Django menggunakan session ID ini untuk mengambil data sesi dari server dan memastikan bahwa pengguna tersebut masih dalam status login. Django tidak menyimpan informasi sensitif seperti password di dalam cookie. Hanya session ID yang disimpan di browser, sementara data sesi sebenarnya tersimpan aman di server.
+
+    Kegunaan lain dari cookies :
+      - Preferensi Pengguna: Cookies dapat menyimpan preferensi seperti pengaturan bahasa atau tema, yang memudahkan personalisasi pengalaman pengguna di sesi berikutnya.
+      - Pelacakan: Cookies sering digunakan untuk tujuan analitik, seperti melacak perilaku pengguna di situs web, atau untuk menyimpan item di keranjang belanja.
+      - Token Autentikasi: Dalam beberapa mekanisme autentikasi yang stateless, seperti JWT (JSON Web Tokens), cookies digunakan untuk menyimpan token autentikasi.
+    
+    Serta, tidak semua cookies aman. Jika tidak ditangani dengan baik, cookies dapat menjadi vektor serangan, terutama jika mereka mengandung informasi sensitif yang tidak dienkripsi. 
+
+    Oleh karena itu, Django mendukung berbagai pengaturan untuk meningkatkan keamanan cookie, di antaranya:
+      - HttpOnly: Mencegah JavaScript di sisi klien untuk mengakses cookie, yang dapat mengurangi risiko serangan cross-site scripting (XSS).
+      - Secure: Memastikan bahwa cookie hanya dikirim melalui koneksi HTTPS, sehingga melindunginya dari penyadapan pada koneksi yang tidak aman.
+      - SameSite: Membatasi pengiriman cookie dalam permintaan lintas situs, yang membantu mencegah serangan cross-site request forgery (CSRF).
+
+
 5. **Jelaskan bagaimana cara kamu mengimplementasikan checklist di atas secara step-by-step (bukan hanya sekadar mengikuti tutorial).**
 
     **Jawab:**
-
 
 
 
