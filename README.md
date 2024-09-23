@@ -467,6 +467,83 @@ Tautan aplikasi PWS: [http://anthony-edbert-ayobelanja.pbp.cs.ui.ac.id](http://a
 # Tugas 4
 ## Pertanyaan dan Jawaban
 
+1. **Apa perbedaan antara `HttpResponseRedirect()` dan `redirect()`**
+
+    **Jawab:**
+
+    Perbedaan antara `HttpResponseRedirect()` dan `redirect()` adalah `HttpResponseRedirect()` merupakan class yang berasal dari `django.http` sedangkan `redirect` adalah fungsi shortcut yang berasal dari `django.shortcuts`. Selain itu dari segi fleksibilitas, `HttpResponseRedirect()` memerlukan URL lengkap atau path relatif tetapi, `redirect` lebih fleksibel karena parameter function dapat menerima berbagai jenis function.
+
+    `HttpResponseRedirect()` hanya menerima URL string, sedangkan `redirect` dapat menerima argumen berupa nama URL pattern, URL relatif, URL absolut, model object, view name dengan argumen.
+
+    `HttpResponseRedirect()` berguna disaat kita membutuhkan kontrol penuh terhadap URL atau ketika bekerja dengan external URL atau generate URLs secara dinamis. Sedangkan,`redirect` berguna ketikan kita membutuhkan suatu fungsi untuk bekerja dengan view name, model objects. `redirect` dalam mengurangi reduces boilerplate code.
+
+    Conton pengunaan `HttpResponseRedirect`:
+    ```python
+    from django.http import HttpResponseRedirect
+    return HttpResponseRedirect('/new-path/')
+    ```
+
+    Contoh pengunaan `redirect`:
+    ```python
+    from django.shortcuts import redirect
+    return redirect('home')  
+    ```
+
+2. **Jelaskan cara kerja penghubungan model `Product` dengan `User`!**
+
+    **Jawab:** 
+
+    Dalam Django, model `Product` biasanya dihubungkan dengan model `User` menggunakan Foreign Key. Dengan adanya Foreign Key, setiap `Product` dapat terhubung ke pengguna tertentu yang telah login.
+
+    Contoh model `Product`:
+    ```python
+    from django.db import models
+    import uuid
+    from django.contrib.auth.models import User
+
+    class ProductEntry(models.Model):
+        user = models.ForeignKey(User, on_delete=models.CASCADE)
+        id = models.UUIDField(primary_key=True,default = uuid.uuid4, editable=False)
+        name = models.CharField(max_length=255)
+        price = models.IntegerField()
+        description = models.TextField()
+        time = models.DateField(auto_now_add=True)
+
+        def __str__(self):
+            return self.name
+    ```
+
+    Cara kerja dalam menghubungkannya adalah dengan setiap kali pengguna membuat entry product, entry tersebut akan dikaitkan dengan `user` yang login. Lalu ForeignKey akan bermanfaat untuk membuat relasi many-to-one antara `Product` dengan `User`. Many-to-one memiliki arti bahwa setiap `user` dapat memiliki lebih dari satu entry `Product`. Lalu parameter `on_delete=models.Cascade` memiliki arti apabila `user` dihapus, maka semua entri `Product` yang berkaitan dengan `user` akan dihapus.
+
+
+3. **Apa perbedaan antara authentication dan authorization, apakah yang dilakukan saat pengguna login? Jelaskan bagaimana Django mengimplementasikan kedua konsep tersebut.**
+
+    **Jawab:**
+
+    Authentication adalah proses untuk memverifikasi identitas seorang pengguna, biasanya dilakukan melalui kredensial seperti nama pengguna dan kata sandi. Proses ini bertujuan untuk memastikan bahwa pengguna yang mencoba mengakses suatu sistem atau layanan adalah benar-benar orang yang berwenang.
+
+    Authorization adalah proses untuk menentukan apa yang diizinkan dilakukan oleh pengguna yang telah terautentikasi, seperti mengakses sumber daya tertentu atau melakukan tindakan-tindakan tertentu dalam sistem. Setelah identitas pengguna diverifikasi melalui proses autentikasi, otorisasi berfungsi sebagai langkah berikutnya untuk mengatur hak akses dan peran pengguna di dalam sistem tersebut. Misalnya, seorang pengguna yang memiliki hak administrator dapat mengakses dan mengelola seluruh data atau konfigurasi sistem, sementara pengguna biasa mungkin hanya memiliki akses terbatas, seperti melihat atau mengedit data tertentu. Otorisasi juga dapat mencakup pengaturan izin yang lebih rinci, seperti menentukan apakah pengguna dapat menambahkan, menghapus, atau memodifikasi informasi. 
+
+    Ketika seorang pengguna melakukan login, autentikasi dilakukan dengan memverifikasi kredensial pengguna, seperti nama pengguna dan kata sandi. Jika kredensial tersebut valid, sistem, seperti Django, akan membuat sesi untuk pengguna tersebut dan menandai mereka sebagai pengguna yang telah terautentikasi. Artinya, proses autentikasi berfungsi untuk memastikan bahwa identitas pengguna adalah benar dan sesuai dengan informasi yang tersimpan di dalam sistem.
+
+    Namun, autentikasi berbeda dari otorisasi. Autentikasi hanya memverifikasi siapa pengguna tersebut, sedangkan otorisasi adalah proses yang menentukan apa saja yang diizinkan untuk dilakukan oleh pengguna tersebut setelah berhasil terautentikasi. Misalnya, setelah login (autentikasi), pengguna mungkin diizinkan (otorisasi) untuk mengakses halaman profil mereka, tetapi mereka mungkin tidak diizinkan untuk mengakses halaman administratif yang hanya dapat diakses oleh pengguna dengan hak istimewa tertentu.
+
+    Django Implementation :
+    Authentication di Django ditangani melalui sistem otentikasi bawaan (`django.contrib.auth`). Built-in sistem tersebut akan memverifikasi kredensial pengguna menggunakan metode seperti `authenticate()` dan ``login()`.
+
+    Authorization dikelola melalui izin dan grup. Setelah otentikasi, Django memeriksa izin pengguna (misalnya, menggunakan `user.has_perm()`) untuk menentukan apakah mereka berwenang untuk melakukan tindakan tertentu.
+
+4. **Bagaimana Django mengingat pengguna yang telah login? Jelaskan kegunaan lain dari cookies dan apakah semua cookies aman digunakan?**
+
+    **Jawab:**
+
+5. **Jelaskan bagaimana cara kamu mengimplementasikan checklist di atas secara step-by-step (bukan hanya sekadar mengikuti tutorial).**
+
+    **Jawab:**
+
+
+
+
 ## Checklist Tugas
 - [x] Mengimplementasikan fungsi registrasi, login, dan logout untuk memungkinkan pengguna untuk mengakses aplikasi sebelumnya dengan lancar.
 - [x] Membuat **dua** akun pengguna dengan masing-masing **tiga** dummy data menggunakan model yang telah dibuat pada aplikasi sebelumnya untuk setiap akun **di lokal**.
