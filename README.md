@@ -676,9 +676,17 @@ Tautan aplikasi PWS: [http://anthony-edbert-ayobelanja.pbp.cs.ui.ac.id](http://a
     ```
 
     8. Menambahkan pada `urls.py`
+    ```python
     path('logout/', logout_user, name='logout_user'),
+    ```
 
-    9.'Menambahkan button `logout` pada `mzin.html`
+    9.'Menambahkan button `logout` pada `main.html`
+    ```python
+    <a href="{% url 'main:logout_user' %}">
+        <button>Logout</button>
+    </a>
+    ```
+
 
     10. Menambahkam baris pada `show_main`
     ```python
