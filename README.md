@@ -6,6 +6,7 @@ E-commerce terbaik untuk segala kalangan umur
 - [Tugas 2](#tugas-2)
 - [Tugas 3](#tugas-3)
 - [Tugas 4](#tugas-4)
+- [Tugas 5](#tugas-5)
 
 ## Profile
 
@@ -150,7 +151,7 @@ Tautan aplikasi PWS: [http://anthony-edbert-ayobelanja.pbp.cs.ui.ac.id](http://a
 2. **Buatlah bagan yang berisi request client ke web aplikasi berbasis Django beserta responnya dan jelaskan pada bagan tersebut kaitan antara `urls.py`, `views.py`, `models.py`, dan berkas `html`.**
 
     **Jawab:**
-    ![Django Flow Chart](https://github.com/anthef/eshop-pbp/blob/main/flow_chart/flow_chart.jpg)
+    ![Django Flow Chart](https://github.com/anthef/eshop-pbp/blob/main/static/flow_chart/flow_chart.jpg)
     
     Dalam aplikasi web Django, ketika seorang user mengirimkan request melalui browser, permintaan tersebut diterima oleh server dan pertama-tama dipetakan ke file `urls.py`. Di sini, Django memeriksa pola URL yang telah didefinisikan untuk menentukan ke mana request tersebut harus diarahkan. Biasanya, request tersebut akan diteruskan ke fungsi atau kelas yang sesuai di dalam `views.py`. `views.py` bertanggung jawab untuk menjalankan logika aplikasi, termasuk memutuskan apakah perlu berinteraksi dengan database melalui `models.py`. Jika interaksi dengan database diperlukan, seperti membaca atau menulis data, `views.py` akan mengakses `models.py` untuk melakukannya. Setelah semua proses selesai, `views.py` akan merender template yang terdiri dari file HTML, CSS, dan JavaScript untuk menampilkan antarmuka pengguna (UI).
 
@@ -445,10 +446,10 @@ Tautan aplikasi PWS: [http://anthony-edbert-ayobelanja.pbp.cs.ui.ac.id](http://a
 ## Screenshot Postman
 | Response   | Screenshot |
 |------------|------------|
-| JSON       | ![JSON](https://github.com/anthef/eshop-pbp/blob/main/screenshot_post/json.png) |
-| XML        | ![XML](https://github.com/anthef/eshop-pbp/blob/main/screenshot_post/xml.png) |
-| JSON_ID    | ![JSON_ID](https://github.com/anthef/eshop-pbp/blob/main/screenshot_post/json_id.png) |
-| XML_ID     | ![XML_ID](https://github.com/anthef/eshop-pbp/blob/main/screenshot_post/xml_id.png) |
+| JSON       | ![JSON](https://github.com/anthef/eshop-pbp/blob/main/static/screenshot_post/json.png) |
+| XML        | ![XML](https://github.com/anthef/eshop-pbp/blob/main/static/screenshot_post/xml.png) |
+| JSON_ID    | ![JSON_ID](https://github.com/anthef/eshop-pbp/blob/main/static/screenshot_post/json_id.png) |
+| XML_ID     | ![XML_ID](https://github.com/anthef/eshop-pbp/blob/main/static/screenshot_post/xml_id.png) |
 
 
 ## Checklist Tugas
@@ -687,7 +688,6 @@ Tautan aplikasi PWS: [http://anthony-edbert-ayobelanja.pbp.cs.ui.ac.id](http://a
     </a>
     ```
 
-
     10. Menambahkam baris pada `show_main`
     ```python
     products = Product.objects.filter(user=req.user)
@@ -706,3 +706,83 @@ Tautan aplikasi PWS: [http://anthony-edbert-ayobelanja.pbp.cs.ui.ac.id](http://a
   - [x] Jelaskan bagaimana cara kamu mengimplementasikan checklist di atas secara step-by-step (bukan hanya sekadar mengikuti tutorial).
 - [x] Melakukan `add`-`commit`-`push` ke GitHub.
 
+# Tugas 5
+## Pertanyaan dan Jawaban
+1. **Jika terdapat beberapa CSS selector untuk suatu elemen HTML, jelaskan urutan prioritas pengambilan CSS selector tersebut!**
+    
+    **Jawab:**
+    Pada css terdapat aturan prioritas untuk menentukan selector mana yang dipakai. Urutan dari prioritasnya, yaitu :
+    1. Important Rule, seperti contoh `!important` dapat mengesampingkan semua prioritas dan memberikan prioritas tertinggi untuk suatu property.
+    2. Inline Styles, seperti contoh `style="color:blue;"` memiliki prioritas tertinggi.
+    3. ID Selector, seperti contoh `#para1` memeiliki prioritas lebih tinggi dari elemen atau class.
+    4. Class Selector, seperti contoh `.center` memiliki prioritas lebih tinggi dari tag HTML.
+    5. Tag Selector, seperti contoh `h1` memiliki prioritas terendah
+
+2. **Mengapa responsive design menjadi konsep yang penting dalam pengembangan aplikasi web? Berikan contoh aplikasi yang sudah dan belum menerapkan responsive design!**
+
+    **Jawab:**
+
+    Responsive design merupakan suatu pendekatan dalam desain web yang memungkinkan tampilan dan layout situr web atau aplikasi dapat beradaptasi secara otomatis sesuai dengan ukuran layar dan orientasi perangkat yang digunakan. Tujuan utama dari responsive design adalah memberikan user experience yang konsisten dan optimal, terlepas dari apakah pengguna mengakses situs dari dekstop, laptop, atau smartphone.
+
+    Dengan menggunakan responsive design, suatu web dapat mengoptimalkan tampilannya. Dedngan itu, elemen di halaman web tidak terlihat distorsi atau tidak beraturan saat diakses dari berbagai ukuran perangkat. Selain itu, responsive design dapat memperbaiki aksesibilitas. Pengguna tidak perlu melakukan zoom in atau zoom out untuk membaca teks atau mengklik tombol di perangkat mobile. Serta, responsive design dapat memastikan bahwa elemen, seperti gambar, vide, atau konten lainnya tetap efisien di layar kecil tanpa memperlampat kinerja halaman.
+
+    Contoh aplikasi yang sudah menerapkan responsive design:
+    - Google
+    - Tokopedia
+    - Tiket.com
+
+    Contoh aplikasi yang belum menerapkan responsive design:
+    - SiakNG
+
+3. **Jelaskan perbedaan antara margin, border, dan padding, serta cara untuk mengimplementasikan ketiga hal tersebut!**
+
+    **Jawab:**
+    - Margin merupakan ruang di luar elemen, antara elemen dengan elemen lainnya.
+    - Border merupakan garis yang membungkus elemen terletak di antara margin dan padding.
+    - Padding merupakan ruang di dalam elemen, antara content dan border
+
+4. **Jelaskan konsep flex box dan grid layout beserta kegunaannya!**
+
+    **Jawab:**
+
+    Flexbox atau flexible box meruapakan metode layout atau tata letak dalam css yang digunakan untuk mengatur elemen dalam satu dimensi, baik secara horizontal maupun vertikal. Flexbox dapat memudahkan pembuatan layout yang fleksibel dan responsif. Sedangkan grid layout merupakan sistem layout dua dimensi yang memungkinkan developer untuk membuat desain halaman yang lebih kompleks dengan baris dan kolom. Grid layout cocok untuk mengatur elemen dalam struktur grid yang rapi.
+
+    Kegunaan flexbox:
+    1. Flexbox memudahkan penataan elemen di dalam container tanpa perlu menggunakan float atau positioning manual. Elemen-elemen dapat disusun secara horizontal (baris) atau vertikal (kolom), dan akan menyesuaikan ukurannya berdasarkan ruang yang tersedia.
+    2. Flexbox memungkinkan elemen untuk secara otomatis memperbesar atau memperkecil ukuran mereka agar sesuai dengan ruang yang tersedia. Elemen dapat membagi ruang secara proporsional sesuai kebutuhan, membuat tata letak lebih adaptif terhadap berbagai ukuran layar.
+    3. Flexbox menyediakan kontrol yang kuat untuk mengatur alignment (penyelarasan) elemen di dalam container, baik secara horizontal maupun vertikal. Ini sangat memudahkan dalam menyusun konten di tengah-tengah halaman atau div, tanpa kode tambahan yang rumit.
+    4. Flexbox secara otomatis menyesuaikan elemen terhadap ukuran layar, menjadikannya alat yang ideal untuk menciptakan tata letak yang responsif. Misalnya, elemen dapat ditata ulang atau diatur ulang ketika ruang tersedia berubah, tanpa perlu menggunakan media queries dalam beberapa kasus.
+    5. Flexbox memungkinkan pengaturan jarak antar elemen dengan mudah menggunakan properti seperti `justify-content` dan `align-items`, membuat kontrol terhadap jarak menjadi lebih efisien.
+    6. Dengan Flexbox, urutan elemen dapat diatur ulang menggunakan properti `order` tanpa perlu mengubah struktur HTML. Ini sangat membantu ketika membuat layout yang responsif dan adaptif.
+
+    Kegunaan Grid Layout:
+    1. Grid layout memungkinkan pengaturan elemen dalam baris dan kolom sekaligus, sehingga cocok untuk membuat layout yang lebih kompleks, seperti tata letak halaman majalah, dashboard, atau galeri gambar.
+    2. Grid memungkinkan kontrol penuh atas ukuran kolom dan baris, baik secara proporsional, menggunakan fraksi (`fr`), piksel (`px`), atau satuan lain. Spacing antar elemen dapat dengan mudah dikendalikan menggunakan properti `grid-gap`, `row-gap`, dan `column-gap`.
+    3. Dengan grid layout, elemen dapat dengan mudah diposisikan atau direntangkan melintasi beberapa kolom atau baris tanpa harus mengubah urutan HTML. Properti seperti `grid-column` dan `grid-row` memungkinkan penempatan elemen tertentu pada sel tertentu dalam grid.
+    4. Grid layout mendukung tata letak yang responsif secara alami. Dengan fitur media queries dan properti auto-fit atau auto-fill, tata letak dapat disesuaikan dengan berbagai ukuran layar. Pengembang dapat membuat berbagai tata letak untuk perangkat yang berbeda hanya dengan mengubah struktur grid.
+    5. Grid layout memudahkan pembuatan template halaman yang konsisten. Dengan properti seperti `grid-template-columns` dan `grid-template-rows`, pengembang dapat dengan cepat menentukan struktur layout untuk keseluruhan halaman atau bagian tertentu.
+    6. Dalam grid layout, elemen tidak harus mengisi seluruh grid. Elemen dapat dengan mudah ditempatkan di mana saja dalam grid, memungkinkan pengaturan ruang kosong yang efektif untuk desain yang lebih estetis dan minimalis.
+
+5. **Jelaskan bagaimana cara kamu mengimplementasikan checklist di atas secara step-by-step (bukan hanya sekadar mengikuti tutorial)!**
+
+    **Jawab:**
+
+
+
+
+## Checklist Tugas
+- [x] Implementasikan fungsi untuk menghapus dan mengedit product.
+- [x] Kustomisasi desain pada template HTML yang telah dibuat pada tugas-tugas sebelumnya menggunakan CSS atau CSS framework (seperti Bootstrap, Tailwind, Bulma) dengan ketentuan sebagai berikut:
+  - [x] Kustomisasi halaman login, register, dan tambah product semenarik mungkin.
+  - [x] Kustomisasi halaman daftar product menjadi lebih menarik dan responsive. Kemudian, perhatikan kondisi berikut:
+    - [x] Jika pada aplikasi belum ada product yang tersimpan, halaman daftar product akan menampilkan gambar dan pesan bahwa belum ada product yang terdaftar.
+    - [x] Jika sudah ada product yang tersimpan, halaman daftar product akan menampilkan detail setiap product dengan menggunakan card (tidak boleh sama persis dengan desain pada Tutorial!).
+  - [x] Untuk setiap card product, buatlah dua buah button untuk mengedit dan menghapus product pada card tersebut!
+  - [x] Buatlah navigation bar (navbar) untuk fitur-fitur pada aplikasi yang responsive terhadap perbedaan ukuran device, khususnya mobile dan desktop.
+- [x] Menjawab beberapa pertanyaan berikut pada `README.md` pada root folder (silakan modifikasi `README.md` yang telah kamu buat sebelumnya; tambahkan subjudul untuk setiap tugas).
+  - [x] Jika terdapat beberapa CSS selector untuk suatu elemen HTML, jelaskan urutan prioritas pengambilan CSS selector tersebut!
+  -  [x] Mengapa responsive design menjadi konsep yang penting dalam pengembangan aplikasi web? Berikan contoh aplikasi yang sudah dan belum menerapkan responsive design!
+  -  [x] Jelaskan perbedaan antara margin, border, dan padding, serta cara untuk mengimplementasikan ketiga hal tersebut!
+  - [x] Jelaskan konsep flex box dan grid layout beserta kegunaannya!
+  - [x] Jelaskan bagaimana cara kamu mengimplementasikan checklist di atas secara step-by-step (bukan hanya sekadar mengikuti tutorial)!
+- [x] Melakukan `add`-`commit`-`push` ke GitHub.
