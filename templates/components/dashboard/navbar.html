@@ -1,0 +1,106 @@
+<nav class="bg-gradient-to-r from-blue-500 to-purple-600 shadow-lg fixed top-0 left-0 z-40 w-full transition duration-300 ease-in-out">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex items-center justify-between h-16">
+            <div class="flex items-center">
+                <h1 class="text-2xl font-bold text-center text-white hover:text-yellow-300 transition duration-300 transform hover:scale-105">Ayo Belanja</h1>
+            </div>
+
+            <div class="hidden md:flex items-center space-x-6">
+                <a href="{% url 'main:show_main' %}" class="text-white hover:text-yellow-300 transition duration-300 transform hover:scale-110">Home</a>
+                <a href="{% url 'main:show_main' %}" class="text-white hover:text-yellow-300 transition duration-300 transform hover:scale-110">Products</a>
+                <a href="{% url 'main:show_main' %}" class="text-white hover:text-yellow-300 transition duration-300 transform hover:scale-110">Categories</a>
+                <a href="{% url 'main:show_main' %}" class="text-white hover:text-yellow-300 transition duration-300 transform hover:scale-110">Cart</a>
+
+                <div class="flex flex-col items-end group">
+                    {% if user.is_authenticated %}
+                    <span class="text-white text-sm group-hover:text-yellow-300 transition duration-300">Welcome</span>
+                    <span class="text-yellow-300 font-semibold text-sm group-hover:text-white transition duration-300">{{ user.username }}</span>
+                    <span class="text-white text-xs group-hover:text-yellow-300 transition duration-300">Last Login: {{ user.last_login|date:"Y-m-d H:i:s" }}</span>
+                    {% endif %}
+                </div>
+
+                {% if user.is_authenticated %}
+                <a href="{% url 'main:logout' %}" class="text-center bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded transition duration-300 ease-in-out transform hover:scale-105 active:scale-95 shadow-md hover:shadow-lg">
+                    Logout
+                </a>
+                {% endif %}
+            </div>
+
+            <div class="md:hidden flex items-center">
+                <button class="mobile-menu-button focus:outline-none">
+                    <svg class="w-6 h-6 text-white transition-transform duration-300 transform hover:text-yellow-300" id="menu-icon" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" stroke="currentColor">
+                        <path d="M4 6h16M4 12h16M4 18h16"></path>
+                    </svg>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div class="mobile-menu hidden md:hidden px-4 w-full md:max-w-full transition-all duration-300 ease-in-out bg-gradient-to-b from-blue-600 to-purple-700">
+        <div class="pt-2 pb-3 space-y-1 mx-auto">
+            <a href="{% url 'main:show_main' %}" class="block text-white hover:text-yellow-300 transition duration-300 py-2">Home</a>
+            <a href="{% url 'main:show_main' %}" class="block text-white hover:text-yellow-300 transition duration-300 py-2">Products</a>
+            <a href="{% url 'main:show_main' %}" class="block text-white hover:text-yellow-300 transition duration-300 py-2">Categories</a>
+            <a href="{% url 'main:show_main' %}" class="block text-white hover:text-yellow-300 transition duration-300 py-2">Cart</a>
+            
+            <div class="flex flex-col items-start space-y-1 py-2">
+                {% if user.is_authenticated %}
+                <span class="text-white text-sm">Welcome</span>
+                <span class="text-yellow-300 font-semibold text-sm">{{ user.username }}</span>
+                <span class="text-white text-xs">Last Login: {{ user.last_login|date:"Y-m-d H:i:s" }}</span>
+                {% endif %}
+            </div>
+
+            {% if user.is_authenticated %}
+            <a href="{% url 'main:logout' %}" class="block text-center bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded transition duration-300 ease-in-out transform hover:scale-105 active:scale-95 shadow-md hover:shadow-lg">
+                Logout
+            </a>
+            {% endif %}
+        </div>
+    </div>
+</nav>
+
+<style>
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.mobile-menu {
+    animation: fadeIn 0.3s ease-out;
+}
+
+@keyframes pulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+}
+
+.pulse-animation {
+    animation: pulse 2s infinite;
+}
+</style>
+
+<script>
+    const btn = document.querySelector("button.mobile-menu-button");
+    const menu = document.querySelector(".mobile-menu");
+    const menuIcon = document.getElementById('menu-icon');
+    const navBar = document.querySelector('nav');
+
+    btn.addEventListener("click", () => {
+        menu.classList.toggle("hidden");
+        menuIcon.classList.toggle("rotate-90");
+    });
+
+    // Add pulse animation to the logo
+    const logo = document.querySelector('h1');
+    logo.classList.add('pulse-animation');
+
+    // Change navbar background on scroll
+    window.addEventListener('scroll', () => {
+        if (window.scrollY > 50) {
+            navBar.classList.add('bg-opacity-90');
+        } else {
+            navBar.classList.remove('bg-opacity-90');
+        }
+    });
+</script>

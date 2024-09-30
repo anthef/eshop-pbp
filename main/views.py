@@ -35,15 +35,6 @@ def create_name_entry(request):
     context={'form':form}
     return render(request,'create_name_entry.html',context)
 
-
-# def delete_product_entry(request, id):
-#     if request.method == 'POST':
-#         product = get_object_or_404(ProductEntry, id=id)
-#         product.delete()
-#         return redirect('main:show_main')
-#     return redirect('main:show_main')
-
-
 def show_xml(request):
     data = ProductEntry.objects.all()
     return HttpResponse(serializers.serialize("xml",data),content_type='application/xml')

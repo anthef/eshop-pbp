@@ -1,61 +1,47 @@
 {% extends 'base.html' %}
 {% block content %}
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Main Page</title>
-</head>
-<body>
-    <h1>Welcome to {{ shop_name }} by {{ name }}</h1>
-    <p>NPM: {{ npm }}</p>
-    <p>Class: {{ class_name }}</p> 
+{% include 'components/dashboard/navbar.html' %}
+
+<div class="container mx-auto px-4 py-8">
+    <div class="bg-indigo-600 text-white p-6 rounded-lg shadow-lg mb-6">
+        <h1 class="text-4xl font-extrabold mb-2 text-center">Welcome to {{ shop_name }}!</h1>
+        <h2 class="text-2xl font-semibold text-center">by {{ name }}</h2>
+    </div>
+
+    <div class="bg-white rounded-lg shadow-md p-4 mb-6">
+        <p class="text-lg font-medium text-gray-700">NPM: <span class="text-indigo-600 font-bold">{{ npm }}</span></p>
+        <p class="text-lg font-medium text-gray-700">Class: <span class="text-indigo-600 font-bold">{{ class_name }}</span></p>
+    </div>
 
     {% if not product_entry %}
-    <p>Belum ada data product pada AyoBelanja.</p>
+    <p class="text-lg mb-4 text-center">Belum ada data product pada AyoBelanja.</p>
     {% else %}
-    <table>
-    <tr>
-        <th>Product Name</th>
-        <th>Time</th>
-        <th>Description</th>
-        <th>Price</th>
-        <th>Actions</th>
-    </tr>
-
-    {% for product in product_entry %}
-    <tr>
-        <td>{{ product.name }}</td>
-        <td>{{ product.time }}</td>
-        <td>{{ product.description }}</td>
-        <td>{{ product.price }}</td>
-        <td>
-            <a href="{% url 'main:edit_product' product.pk %}">
-                <button>
-                    Edit
-                </button>
-            </a>
-        </td>
-        <td>
-            <a href="{% url 'main:delete_product' product.pk %}">
-                <button>
-                    Delete
-                </button>
-            </a>
-        </td>
-    </tr>
-    {% endfor %}
-    </table>
+    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+        {% for product in product_entry %}
+        <div class="max-w-sm rounded overflow-hidden shadow-lg bg-white hover:shadow-xl transition-shadow duration-300 ease-in-out">
+            <img class="w-full h-48 object-cover object-center" src="https://via.placeholder.com/300x200" alt="{{ product.name }}">
+            <div class="px-6 py-4">
+                <div class="font-bold text-xl mb-2 text-gray-800">{{ product.name }}</div>
+                <p class="text-gray-600 text-sm mb-2">Added: {{ product.time|date:"F d, Y" }}</p>
+                <p class="text-gray-700 text-base mb-4">{{ product.description|truncatewords:20 }}</p>
+                <div class="flex items-center justify-between mb-4">
+                    <span class="text-xl font-bold text-indigo-600">${{ product.price|floatformat:2 }}</span>
+                </div>
+                <div class="flex justify-between">
+                    <a href="{% url 'main:edit_product' product.pk %}" class="bg-yellow-500 hover:bg-yellow-600 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline transition duration-300 ease-in-out transform hover:-translate-y-1 hover:scale-105">
+                        Edit
+                    </a>
+                    <a href="{% url 'main:delete_product' product.pk %}" class="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline transition duration-300 ease-in-out transform hover:-translate-y-1 hover:scale-105">
+                        Delete
+                    </a>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
     {% endif %}
 
-    <br />
-
-    <a href="{% url 'main:create_name_entry' %}">
-        <button>Add New Product Entry</button>
-    </a>
-    <a href="{% url 'main:logout' %}">
-        <button>Logout</button>
-    </a>
-    <h5>Sesi terakhir login: {{ last_login }}</h5>
-</body>
-</html>
+    <div class="mt-8 space-x-4 text-center">
+    </div>
+</div>
 {% endblock content %}
