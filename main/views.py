@@ -36,12 +36,12 @@ def create_name_entry(request):
     return render(request,'create_name_entry.html',context)
 
 
-def delete_product_entry(request, id):
-    if request.method == 'POST':
-        product = get_object_or_404(ProductEntry, id=id)
-        product.delete()
-        return redirect('main:show_main')
-    return redirect('main:show_main')
+# def delete_product_entry(request, id):
+#     if request.method == 'POST':
+#         product = get_object_or_404(ProductEntry, id=id)
+#         product.delete()
+#         return redirect('main:show_main')
+#     return redirect('main:show_main')
 
 
 def show_xml(request):
@@ -93,6 +93,22 @@ def logout_user(request):
     response.delete_cookie('last_login')
     print("Logout successful, redirecting to login page") 
     return response
+
+def delete_product(request, id):
+    mood = ProductEntry.objects.get(pk = id)
+    mood.delete()
+    return HttpResponseRedirect(reverse('main:show_main'))
+
+def edit_product(request, id):
+    mood = ProductEntry.objects.get(pk = id)
+    form = ProductEntryForm(request.POST or None, instance=mood)
+    if form.is_valid() and request.method == "POST":
+        form.save()
+        return HttpResponseRedirect(reverse('main:show_main'))
+    context = {'form': form}
+    return render(request, "edit_product.html", context)
+
+
 
 
 
