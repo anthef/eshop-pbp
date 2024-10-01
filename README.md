@@ -733,13 +733,15 @@ Tautan aplikasi PWS: [http://anthony-edbert-ayobelanja.pbp.cs.ui.ac.id](http://a
 
     Contoh aplikasi yang belum menerapkan responsive design:
     - SiakNG
+    - https://nostalgicweb.com/
 
 3. **Jelaskan perbedaan antara margin, border, dan padding, serta cara untuk mengimplementasikan ketiga hal tersebut!**
 
     **Jawab:**
-    - Margin merupakan ruang di luar elemen, antara elemen dengan elemen lainnya.
-    - Border merupakan garis yang membungkus elemen terletak di antara margin dan padding.
-    - Padding merupakan ruang di dalam elemen, antara content dan border
+    ![Margin, Padding, Border](https://github.com/anthef/eshop-pbp/blob/main/static_file/tugas_5/marginpadborder.png)
+    - Margin merupakan ruang di luar elemen, antara elemen dengan elemen lainnya. Penggunaan margin sering digunakan untuk memberikan ruang antar elemen, sehingga tata letak halaman lebih teratur.
+    - Border merupakan garis yang membungkus elemen terletak di antara margin dan padding. Border digunakan untuk memberikan definisi atau pemisahan visual antara elemen dan latar belakang.
+    - Padding merupakan ruang di dalam elemen, antara content dan border. Padding sering digunakan untuk memberikan ruang di sekitar konten agar lebih mudah dibaca dan terlihat lebih baik.
 
 4. **Jelaskan konsep flex box dan grid layout beserta kegunaannya!**
 
@@ -766,7 +768,532 @@ Tautan aplikasi PWS: [http://anthony-edbert-ayobelanja.pbp.cs.ui.ac.id](http://a
 5. **Jelaskan bagaimana cara kamu mengimplementasikan checklist di atas secara step-by-step (bukan hanya sekadar mengikuti tutorial)!**
 
     **Jawab:**
+    1. Menambahkan dua function di `views.py`, yaitu `delete_product` dan `edit_product` yang bisa diterapkan pada setiap productnya.
+    ```python
+    def delete_product(request, id):
+        mood = ProductEntry.objects.get(pk = id)
+        mood.delete()
+        return HttpResponseRedirect(reverse('main:show_main'))
 
+    def edit_product(request, id):
+        mood = ProductEntry.objects.get(pk = id)
+        form = ProductEntryForm(request.POST or None, instance=mood)
+        if form.is_valid() and request.method == "POST":
+            form.save()
+            return HttpResponseRedirect(reverse('main:show_main'))
+        context = {'form': form}
+        return render(request, "edit_product.html", context)
+    ```
+
+    2. Melakukan routing dari kedua function ini ke `urls.py`
+    ```python
+        path('delete/<uuid:id>', delete_product, name='delete_product'),
+        path('edit-product/<uuid:id>', edit_product, name='edit_product'),
+    ```
+
+    3. Pada `base.html` menambahkan beberapa code untuk responsive design web dan juga tailwind css
+    ```python
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script src="https://cdn.tailwindcss.com"></script>
+    ```
+
+    4. Membuat `global.css` untuk mengatur tampilan general dari web
+    ```css
+    .form-style form input, form textarea, form select {
+    width: 100%;
+    padding: 0.5rem;
+    border: 2px solid #bcbcbc;
+    border-radius: 0.375rem;
+    }
+    .form-style form input:focus, form textarea:focus, form select:focus {
+        outline: none;
+        border-color: #674ea7;
+        box-shadow: 0 0 0 3px #674ea7;
+    }
+    @keyframes shine {
+        0% { background-position: -200% 0; }
+        100% { background-position: 200% 0; }
+    }
+    .animate-shine {
+        background: linear-gradient(120deg, rgba(255, 255, 255, 0.3), rgba(255, 255, 255, 0.1) 50%, rgba(255, 255, 255, 0.3));
+        background-size: 200% 100%;
+        animation: shine 3s infinite;
+    }
+    ```
+
+    5. Membuat dua `navbar.html` berbeda untuk authentication page dan juga main page
+    ```html
+    <nav class="bg-gradient-to-r from-blue-600 to-purple-700 shadow-lg fixed top-0 left-0 z-40 w-full transition duration-300 ease-in-out">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex items-center justify-between h-16">
+            <div class="flex items-center">
+                <h1 class="text-4xl font-bold text-center text-white hover:text-yellow-300 transition duration-300 transform hover:scale-105 pulse-animation">Ayo Belanja</h1>
+            </div>
+
+            <div class="hidden md:flex items-center space-x-4">
+                <a href="{% url 'main:login' %}" class="text-center bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-6 rounded-full transition duration-300 ease-in-out transform hover:scale-105 active:scale-95 shadow-md hover:shadow-lg">
+                    Login
+                </a>
+                <a href="{% url 'main:register' %}" class="text-center bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-6 rounded-full transition duration-300 ease-in-out transform hover:scale-105 active:scale-95 shadow-md hover:shadow-lg">
+                    Register
+                </a>
+            </div>
+
+            <div class="md:hidden flex items-center">
+                <button class="mobile-menu-button focus:outline-none">
+                    <svg class="w-6 h-6 text-white transition-transform duration-300 transform hover:text-yellow-300" id="menu-icon" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" stroke="currentColor">
+                        <path d="M4 6h16M4 12h16M4 18h16"></path>
+                    </svg>
+                </button>
+            </div>
+        </div>
+        </div>
+
+        <div class="mobile-menu hidden md:hidden px-4 w-full md:max-w-full transition-all duration-300 ease-in-out bg-gradient-to-b from-blue-600 to-purple-700">
+            <div class="pt-2 pb-3 space-y-2 mx-auto">
+                <a href="{% url 'main:login' %}" class="block text-center bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-full transition duration-300 ease-in-out transform hover:scale-105 active:scale-95 shadow-md hover:shadow-lg">
+                    Login
+                </a>
+                <a href="{% url 'main:register' %}" class="block text-center bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded-full transition duration-300 ease-in-out transform hover:scale-105 active:scale-95 shadow-md hover:shadow-lg">
+                    Register
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <style>
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(-10px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
+    .mobile-menu {
+        animation: fadeIn 0.3s ease-out;
+    }
+
+    @keyframes pulse {
+        0%, 100% { transform: scale(1); }
+        50% { transform: scale(1.05); }
+    }
+
+    .pulse-animation {
+        animation: pulse 2s infinite;
+    }
+    </style>
+
+    <script>
+        const btn = document.querySelector("button.mobile-menu-button");
+        const menu = document.querySelector(".mobile-menu");
+        const menuIcon = document.getElementById('menu-icon');
+        const navBar = document.querySelector('nav');
+
+        btn.addEventListener("click", () => {
+            menu.classList.toggle("hidden");
+            menuIcon.classList.toggle("rotate-90");
+        });
+
+        const logo = document.querySelector('h1');
+        logo.classList.add('pulse-animation');
+
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 50) {
+                navBar.classList.add('bg-opacity-90');
+            } else {
+                navBar.classList.remove('bg-opacity-90');
+            }
+        });
+    </script>
+    ```
+    Membuat navbar pada authentication page yang hanya berisi login dan juga logout. Sedangkan navbar untuk main page berisi home, products, categories, cart, dan juga profile.
+    ```html
+    <nav class="bg-gradient-to-r from-blue-500 to-purple-600 shadow-lg fixed top-0 left-0 z-40 w-full transition duration-300 ease-in-out">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex items-center justify-between h-16">
+            <div class="flex items-center">
+                <h1 class="text-3xl font-bold text-center text-white hover:text-yellow-300 transition duration-300 transform hover:scale-125">Ayo Belanja</h1>
+            </div>
+
+            <div class="hidden md:flex items-center space-x-6">
+                <a href="{% url 'main:show_main' %}" class="text-white hover:text-yellow-300 transition duration-300 transform hover:scale-110">Home</a>
+                <a href="{% url 'main:show_main' %}" class="text-white hover:text-yellow-300 transition duration-300 transform hover:scale-110">Products</a>
+                <a href="{% url 'main:show_main' %}" class="text-white hover:text-yellow-300 transition duration-300 transform hover:scale-110">Categories</a>
+                <a href="{% url 'main:show_main' %}" class="text-white hover:text-yellow-300 transition duration-300 transform hover:scale-110">Cart</a>
+
+                <div class="flex flex-col items-end group">
+                    {% if user.is_authenticated %}
+                    <span class="text-white text-sm group-hover:text-yellow-300 transition duration-300">Welcome</span>
+                    <span class="text-yellow-300 font-semibold text-sm group-hover:text-white transition duration-300">{{ user.username }}</span>
+                    <span class="text-white text-xs group-hover:text-yellow-300 transition duration-300">Last Login: {{ user.last_login|date:"Y-m-d H:i:s" }}</span>
+                    {% endif %}
+                </div>
+
+                {% if user.is_authenticated %}
+                <a href="{% url 'main:logout' %}" class="text-center bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded transition duration-300 ease-in-out transform hover:scale-105 active:scale-95 shadow-md hover:shadow-lg">
+                    Logout
+                </a>
+                {% endif %}
+            </div>
+
+            <div class="md:hidden flex items-center">
+                <button class="mobile-menu-button focus:outline-none">
+                    <svg class="w-6 h-6 text-white transition-transform duration-300 transform hover:text-yellow-300" id="menu-icon" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" stroke="currentColor">
+                        <path d="M4 6h16M4 12h16M4 18h16"></path>
+                    </svg>
+                </button>
+            </div>
+            </div>
+        </div>
+
+        <div class="mobile-menu hidden md:hidden px-4 w-full md:max-w-full transition-all duration-300 ease-in-out bg-gradient-to-b from-blue-600 to-purple-700">
+            <div class="pt-2 pb-3 space-y-1 mx-auto">
+                <a href="{% url 'main:show_main' %}" class="block text-white hover:text-yellow-300 transition duration-300 py-2">Home</a>
+                <a href="{% url 'main:show_main' %}" class="block text-white hover:text-yellow-300 transition duration-300 py-2">Products</a>
+                <a href="{% url 'main:show_main' %}" class="block text-white hover:text-yellow-300 transition duration-300 py-2">Categories</a>
+                <a href="{% url 'main:show_main' %}" class="block text-white hover:text-yellow-300 transition duration-300 py-2">Cart</a>
+                
+                <div class="flex flex-col items-start space-y-1 py-2">
+                    {% if user.is_authenticated %}
+                    <span class="text-white text-sm">Welcome</span>
+                    <span class="text-yellow-300 font-semibold text-sm">{{ user.username }}</span>
+                    <span class="text-white text-xs">Last Login: {{ user.last_login|date:"Y-m-d H:i:s" }}</span>
+                    {% endif %}
+                </div>
+
+                {% if user.is_authenticated %}
+                <a href="{% url 'main:logout' %}" class="block text-center bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded transition duration-300 ease-in-out transform hover:scale-105 active:scale-95 shadow-md hover:shadow-lg">
+                    Logout
+                </a>
+                {% endif %}
+            </div>
+        </div>
+    </nav>
+
+    <style>
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(-10px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
+    .mobile-menu {
+        animation: fadeIn 0.3s ease-out;
+    }
+
+    @keyframes pulse {
+        0%, 100% { transform: scale(1); }
+        50% { transform: scale(1.05); }
+    }
+
+    .pulse-animation {
+        animation: pulse 2s infinite;
+    }
+    </style>
+
+    <script>
+        const btn = document.querySelector("button.mobile-menu-button");
+        const menu = document.querySelector(".mobile-menu");
+        const menuIcon = document.getElementById('menu-icon');
+        const navBar = document.querySelector('nav');
+
+        btn.addEventListener("click", () => {
+            menu.classList.toggle("hidden");
+            menuIcon.classList.toggle("rotate-90");
+        });
+
+        const logo = document.querySelector('h1');
+        logo.classList.add('pulse-animation');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 50) {
+                navBar.classList.add('bg-opacity-90');
+            } else {
+                navBar.classList.remove('bg-opacity-90');
+            }
+        });
+    </script>
+    ```
+
+    6. Menambahkan path untuk ke static folder pada `settings.py`
+    ```python
+    STATIC_URL = '/static/'
+    if DEBUG:
+    STATICFILES_DIRS = [
+        BASE_DIR / 'static'
+    ]
+    else:
+    STATIC_ROOT = BASE_DIR / 'static' 
+    ```
+
+    7. Membuat tampilan `login.html` yang meminta username dan juga password serta dapat mengarahkan ke `register.html`
+    ```html
+    {% extends 'base.html' %}
+
+    {% block meta %}
+    <title>Login</title>
+    {% endblock meta %}
+    {% block content %}
+    {% include 'components/auth/navbar.html' %}
+        <main class="flex items-center justify-center w-screen h-screen px-5">
+            <div class="shadow-xl bg-white p-5 sm:p-10 rounded-3xl flex flex-col gap-10 items-center border-[2px] border-black/5 w-full max-w-md">
+                <h2 class="font-bold text-xl sm:text-2xl text-center">Ayo Belanja</h2>
+                
+                <form class="mt-8 space-y-6 w-full" method="POST" action="">
+                    {% csrf_token %}
+                    <input type="hidden" name="remember" value="true">
+                    
+                    <div class="space-y-4">
+                        <div>
+                            <label for="username" class="block text-sm font-medium text-gray-700">Username</label>
+                            <input id="username" name="username" type="text" required aria-label="Username" aria-required="true"
+                                class="appearance-none rounded relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm" placeholder="Enter your username">
+                        </div>
+
+                        <div>
+                            <label for="password" class="block text-sm font-medium text-gray-700">Password</label>
+                            <input id="password" name="password" type="password" required aria-label="Password" aria-required="true"
+                                class="appearance-none rounded relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm" placeholder="Enter your password">
+                        </div>
+                    </div>
+
+                    <div>
+                        <button type="submit" class="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition duration-150 ease-in-out">
+                            Sign in
+                        </button>
+                    </div>
+                </form>
+
+                {% if messages %}
+                <div class="mt-4 w-full">
+                    {% for message in messages %}
+                        {% if message.tags == "success" %}
+                            <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative" role="alert">
+                                <span class="block sm:inline">{{ message }}</span>
+                            </div>
+                        {% elif message.tags == "error" %}
+                            <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
+                                <span class="block sm:inline">{{ message }}</span>
+                            </div>
+                        {% else %}
+                            <div class="bg-blue-100 border border-blue-400 text-blue-700 px-4 py-3 rounded relative" role="alert">
+                                <span class="block sm:inline">{{ message }}</span>
+                            </div>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+                {% endif %}
+
+                <div class="text-center mt-4">
+                    <p class="text-sm text-black">
+                        Don't have an account yet? 
+                        <a href="{% url 'main:register' %}" class="font-medium text-indigo-600 hover:text-indigo-800 transition duration-150 ease-in-out">
+                            Register Now
+                        </a>
+                    </p>
+                </div>
+            </div>
+        </main>
+    {% endblock content %}
+    ```
+
+    8. Membuat `register.html`
+    ```html
+    {% extends 'base.html' %}
+    {% load widget_tweaks %}
+    {% block meta %}
+    <title>Register</title>
+    {% endblock meta %}
+
+    {% block content %}
+    {% include 'components/auth/navbar.html' %}
+    <div class="flex items-center justify-center min-h-screen px-5 bg-gray-100">
+    <div class="shadow-xl bg-white p-5 sm:p-10 rounded-3xl flex flex-col gap-10 items-center border-[2px] border-black/5 w-full max-w-md">
+        <h2 class="font-bold text-xl sm:text-2xl text-center text-indigo-700">Ayo Belanja</h2>
+        <p class="text-center text-gray-600 text-sm">Create your account to start BELANJA</p>
+
+        <form class="w-full space-y-6" method="POST">
+        {% csrf_token %}
+        <input type="hidden" name="remember" value="true">
+        
+        <div class="rounded-md shadow-sm space-y-4">
+            {% for field in form %}
+            <div>
+            <label for="{{ field.id_for_label }}" class="block text-sm font-semibold text-gray-700 mb-1">
+                {{ field.label }}
+            </label>
+            <div class="relative">
+                {{ field|add_class:"block w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition duration-150 ease-in-out" }}
+                {% if field.errors %}
+                <div class="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
+                <svg class="h-5 w-5 text-red-500" fill="currentColor" viewBox="0 0 20 20">
+                    <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd" />
+                </svg>
+                </div>
+                {% endif %}
+            </div>
+            {% if field.errors %}
+            <div class="mt-1 text-sm text-red-600">
+                {% for error in field.errors %}
+                <p>{{ error }}</p>
+                {% endfor %}
+            </div>
+            {% endif %}
+            </div>
+            {% endfor %}
+        </div>
+
+        <div>
+            <button type="submit" class="w-full py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 transition-all duration-300 ease-in-out focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+            Register
+            </button>
+        </div>
+        </form>
+
+        {% if messages %}
+        <div class="mt-4 w-full">
+        {% for message in messages %}
+        <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
+            <span class="block sm:inline">{{ message }}</span>
+        </div>
+        {% endfor %}
+        </div>
+        {% endif %}
+
+        <div class="text-center mt-4 w-full">
+        <p class="text-sm text-gray-600">
+            Already have an account?
+            <a href="{% url 'main:login' %}" class="font-medium text-indigo-600 hover:text-indigo-800 transition duration-300">
+            Login here
+            </a>
+        </p>
+        </div>
+    </div>
+    </div>
+    {% endblock content %}
+    ```
+
+    9. Membuat `card_product.html` yang dapat menampilkan atribut-atribut pada model, menghaous dan mengedit product, serta menambahkannya ke cart.
+    ```html
+    <div class="max-w-sm rounded overflow-hidden shadow-lg bg-white hover:shadow-xl transition-shadow duration-300 ease-in-out"></div>
+    <img class="w-full h-48 object-cover object-center" src="{% if product.image %}{{ product.image.url }}{% else %}https://via.placeholder.com/300x200{% endif %}" alt="{{ product.name }}">
+    <div class="px-6 py-4">
+        <div class="font-bold text-xl mb-2 text-gray-800">{{ product.name }}</div>
+        <p class="text-gray-700 text-base mb-4">{{ product.description|truncatewords:20 }}</p>
+        <div class="flex items-center justify-between">
+            <span class="text-xl font-bold text-indigo-600">${{ product.price|floatformat:2 }}</span>
+            <button class="bg-indigo-500 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline transition duration-300 ease-in-out transform hover:-translate-y-1 hover:scale-110">
+                Add to Cart
+            </button>
+        </div>
+        </div>
+        <div class="px-6 pt-4 pb-2">
+            <span class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">#category</span>
+            <span class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">#tag</span>
+        </div>
+    </div>
+    ```
+
+    10. Memperbaiki tampilan `create_name_entry.html`
+    ```python
+    {% extends 'base.html' %}
+    {% load static %}
+    {% load widget_tweaks %}
+    {% block meta %}
+    <title>Create Product</title>
+    {% endblock meta %}
+
+    {% block content %}
+    {% include 'components/dashboard/navbar.html' %}
+
+    <div class="flex flex-col min-h-screen bg-gray-100 pt-16">
+    <div class="container mx-auto px-4 py-12 max-w-lg"> 
+        <h1 class="text-4xl font-extrabold text-center mb-8 text-indigo-700">Create Product</h1>
+    
+        <div class="bg-white shadow-lg rounded-lg p-8">
+        <form method="POST" class="space-y-8">
+            {% csrf_token %}
+            
+            {% for field in form %}
+            <div class="flex flex-col space-y-2">
+                <label for="{{ field.id_for_label }}" class="text-lg font-semibold text-gray-700">
+                {{ field.label }}
+                </label>
+
+                <div class="w-full">
+                {{ field|add_class:"form-input border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition ease-in-out duration-200" }}
+                </div>
+
+                {% if field.help_text %}
+                <p class="text-sm text-gray-500">{{ field.help_text }}</p>
+                {% endif %}
+
+                {% for error in field.errors %}
+                <p class="text-sm text-red-500">{{ error }}</p>
+                {% endfor %}
+            </div>
+            {% endfor %}
+            
+            <div class="flex justify-center mt-8">
+            <button type="submit" class="bg-indigo-600 text-white font-semibold px-6 py-3 rounded-lg shadow-lg hover:bg-indigo-700 hover:shadow-xl transition-all duration-300 w-full">
+                Create Product
+            </button>
+            </div>
+        </form>
+        </div>
+    </div>
+    </div>
+
+    {% endblock %}
+
+    ```
+    11. Memperbaiki tampilan `edit_product.html`
+    ```html
+    {% extends 'base.html' %}
+    {% load static %}
+    {% load widget_tweaks %}
+    {% block meta %}
+    <title>Edit Mood</title>
+    {% endblock meta %}
+
+    {% block content %}
+    {% include 'components/dashboard/navbar.html' %}
+
+    <div class="flex flex-col min-h-screen bg-gray-100 pt-16">
+    <div class="container mx-auto px-4 py-12 max-w-lg">
+        <h1 class="text-4xl font-extrabold text-center mb-8 text-indigo-700">Edit Mood Entry</h1>
+
+        <div class="bg-white shadow-md rounded-lg p-8">
+        <form method="POST" class="space-y-8">
+            {% csrf_token %}
+            {% for field in form %}
+            <div class="flex flex-col space-y-2">
+                <label for="{{ field.id_for_label }}" class="text-lg font-semibold text-gray-700">
+                {{ field.label }}
+                </label>
+                <div class="w-full">
+                {{ field|add_class:"form-input border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition ease-in-out duration-200" }}
+                </div>
+
+                {% if field.help_text %}
+                <p class="text-sm text-gray-500">{{ field.help_text }}</p>
+                {% endif %}
+
+                {% for error in field.errors %}
+                <p class="text-sm text-red-500">{{ error }}</p>
+                {% endfor %}
+            </div>
+            {% endfor %}
+
+            <div class="flex justify-center mt-8">
+            <button type="submit" class="bg-indigo-600 text-white font-semibold px-6 py-3 rounded-lg shadow-lg hover:bg-indigo-700 hover:shadow-xl transition-all duration-300 w-full">
+                Edit Mood Entry
+            </button>
+            </div>
+        </form>
+        </div>
+    </div>
+    </div>
+
+    {% endblock %}
+
+    ```
 
 
 

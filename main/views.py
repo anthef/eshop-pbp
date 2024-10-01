@@ -25,6 +25,7 @@ def show_main(request):
 
     return render(request, "main.html", context)
 
+@login_required(login_url='/login')
 def create_name_entry(request):
     form = ProductEntryForm(request.POST or None)
     if form.is_valid() and request.method == 'POST':
@@ -35,18 +36,22 @@ def create_name_entry(request):
     context={'form':form}
     return render(request,'create_name_entry.html',context)
 
+@login_required(login_url='/login')
 def show_xml(request):
     data = ProductEntry.objects.all()
     return HttpResponse(serializers.serialize("xml",data),content_type='application/xml')
 
+@login_required(login_url='/login')
 def show_json(request):
     data = ProductEntry.objects.all()
     return HttpResponse(serializers.serialize("json",data),content_type='application/json')
 
+@login_required(login_url='/login')
 def show_xml_by_id(request, id):
     data = ProductEntry.objects.filter(pk=id)
     return HttpResponse(serializers.serialize("xml", data), content_type="application/xml")
 
+@login_required(login_url='/login')
 def show_json_by_id(request, id):
     data = ProductEntry.objects.filter(pk=id)
     return HttpResponse(serializers.serialize("json", data), content_type="application/json")
@@ -78,6 +83,7 @@ def login_user(request):
     context = {'form': form}
     return render(request, 'login.html', context)
 
+@login_required(login_url='/login')
 def logout_user(request):
     logout(request)
     response = HttpResponseRedirect(reverse('main:login'))
@@ -85,11 +91,13 @@ def logout_user(request):
     print("Logout successful, redirecting to login page") 
     return response
 
+@login_required(login_url='/login')
 def delete_product(request, id):
     mood = ProductEntry.objects.get(pk = id)
     mood.delete()
     return HttpResponseRedirect(reverse('main:show_main'))
 
+@login_required(login_url='/login')
 def edit_product(request, id):
     mood = ProductEntry.objects.get(pk = id)
     form = ProductEntryForm(request.POST or None, instance=mood)
