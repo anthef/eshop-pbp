@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'main',
     'widget_tweaks',
+    # 'csp'
 ]
 
 MIDDLEWARE = [
@@ -52,6 +53,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    # 'csp.middleware.CSPMiddleware',
 ]
 
 ROOT_URLCONF = 'eshop_pbp.urls'
@@ -134,3 +136,8 @@ else:
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 CSRF_TRUSTED_ORIGINS = ["http://localhost","http://127.0.0.1","http://anthony-edbert-ayobelanja.pbp.cs.ui.ac.id/", "https://anthony-edbert-ayobelanja.pbp.cs.ui.ac.id/"]
+
+# CSP_DEFAULT_SRC = ("'self'",)
+# CSP_SCRIPT_SRC = ("'self'", "https://cdn.jsdelivr.net")
+# CSP_STYLE_SRC = ("'self'", "'unsafe-inline'", "https://cdn.jsdelivr.net")
+# CSP_IMG_SRC = ("'self'", "https://via.placeholder.com")

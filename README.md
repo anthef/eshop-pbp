@@ -7,6 +7,7 @@ E-commerce terbaik untuk segala kalangan umur
 - [Tugas 3](#tugas-3)
 - [Tugas 4](#tugas-4)
 - [Tugas 5](#tugas-5)
+- [Tugas 6](#tugas-6)
 
 ## Profile
 
@@ -1312,4 +1313,26 @@ Tautan aplikasi PWS: [http://anthony-edbert-ayobelanja.pbp.cs.ui.ac.id](http://a
   -  [x] Jelaskan perbedaan antara margin, border, dan padding, serta cara untuk mengimplementasikan ketiga hal tersebut!
   - [x] Jelaskan konsep flex box dan grid layout beserta kegunaannya!
   - [x] Jelaskan bagaimana cara kamu mengimplementasikan checklist di atas secara step-by-step (bukan hanya sekadar mengikuti tutorial)!
+- [x] Melakukan `add`-`commit`-`push` ke GitHub.
+
+
+# Tugas 6
+## Pertanyaan dan Jawaban
+
+## Checklist Tugas
+- [x] Mengubah tugas 5 yang telah dibuat sebelumnya menjadi menggunakan AJAX.
+  - [x] AJAX `GET`
+    - [x] Ubahlah kode `cards` data mood agar dapat mendukung AJAX `GET`.
+    - [x] Lakukan pengambilan data mood menggunakan AJAX `GET`. Pastikan bahwa data yang diambil hanyalah data milik pengguna yang logged-in.
+  - [x] AJAX `POST`
+    - [x] Buatlah sebuah tombol yang membuka sebuah modal dengan form untuk menambahkan mood.
+    - [x] Buatlah fungsi view baru untuk menambahkan mood baru ke dalam basis data.
+    - [x] Buatlah path `/create-ajax/` yang mengarah ke fungsi view yang baru kamu buat.
+    - [x] Hubungkan form yang telah kamu buat di dalam modal kamu ke path `/create-ajax/`.
+    - [x] Lakukan refresh pada halaman utama secara asinkronus untuk menampilkan daftar mood terbaru tanpa reload halaman utama secara keseluruhan.
+- [x] Menjawab beberapa pertanyaan berikut pada `README.md` pada root folder (silakan modifikasi `README.md` yang telah kamu buat sebelumnya; tambahkan subjudul untuk setiap tugas).
+  - [x] Jelaskan manfaat dari penggunaan JavaScript dalam pengembangan aplikasi web!
+  - [x]  Jelaskan fungsi dari penggunaan `await` ketika kita menggunakan `fetch()`! Apa yang akan terjadi jika kita tidak menggunakan `await`?
+  - [x]  Mengapa kita perlu menggunakan decorator `csrf_exempt` pada view yang akan digunakan untuk AJAX `POST`?
+  - [x] Pada tutorial PBP minggu ini, pembersihan data input pengguna dilakukan di belakang (backend) juga. Mengapa hal tersebut tidak dilakukan di frontend saja?
 - [x] Melakukan `add`-`commit`-`push` ke GitHub.
