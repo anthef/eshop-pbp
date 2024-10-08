@@ -1318,6 +1318,47 @@ Tautan aplikasi PWS: [http://anthony-edbert-ayobelanja.pbp.cs.ui.ac.id](http://a
 
 # Tugas 6
 ## Pertanyaan dan Jawaban
+1. **Jelaskan manfaat dari penggunaan JavaScript dalam pengembangan aplikasi web!**
+    
+    **Jawab:**
+    - JavaScript memungkinkan pengembang membuat halaman web yang interaktif dan dinamis
+    - JavaScript dijalankan di browser pengguna (client-side), yang artinya pemrosesan dan interaksi dapat dilakukan langsung di perangkat pengguna tanpa perlu mengirim data ke server setiap saat.
+    - JavaScript memungkinkan pengiriman dan penerimaan data dari server tanpa memuat ulang halaman secara keseluruhan. 
+    - JavaScript dapat digunakan untuk menciptakan aplikasi yang lebih responsif dengan mengubah tampilan atau tata letak halaman web sesuai dengan ukuran perangkat. 
+    - JavaScript mendukung pembuatan Single Page Applications (SPA), di mana seluruh aplikasi web dimuat dalam satu halaman dan konten diubah secara dinamis tanpa memuat ulang halaman.
+
+2. **Jelaskan fungsi dari penggunaan `await` ketika kita menggunakan `fetch()`! Apa yang akan terjadi jika kita tidak menggunakan `await`?**
+
+    **Jawab:**
+
+    Fungsi dari penggunaan `await` ketika kita menggunakan `fetch()` adalah untuk menunggu hingga promise yang dihasilkan oleh `fetch()` selesai diproses (resolved). `fetch()` mengembalikan sebuah promise yang mewakili permintaan asinkron ke server, dan `await` memastikan bahwa kode tidak akan dilanjutkan hingga promise tersebut selesai.
+
+    Jika kita tidak menggunakan `await` atau metode lain untuk menangani promise (seperti `.then()`), JavaScript akan melanjutkan eksekusi kode berikutnya sebelum permintaan selesai. Ini berarti kode yang bergantung pada hasil dari `fetch()` (seperti data yang diambil dari server) bisa jadi dijalankan sebelum data yang diperlukan tersedia.
+
+3. **Mengapa kita perlu menggunakan decorator `csrf_exempt` pada view yang akan digunakan untuk AJAX `POST`?**
+
+    **Jawab:**
+
+    Secara default, Django menyediakan perlindungan CSRF untuk semua permintaan POST agar aplikasi web aman dari serangan CSRF. Namun, dalam beberapa kasus, seperti saat menangani AJAX:
+    - Ketika sedang melakukan pengujian atau dalam tahap pengembangan awal, kita mungkin ingin menonaktifkan perlindungan CSRF untuk mempercepat proses pengujian permintaan AJAX. Menggunakan @csrf_exempt akan menonaktifkan sementara validasi token CSRF sehingga kita tidak perlu menambahkan token CSRF pada setiap permintaan POST.
+    - Jika kita membuat API yang akan diakses oleh klien yang tidak menggunakan mekanisme CSRF Django, seperti aplikasi mobile atau aplikasi pihak ketiga, kita mungkin perlu menonaktifkan perlindungan CSRF karena aplikasi ini tidak akan mengirimkan token CSRF yang diharapkan Django.
+    - Jika permintaan AJAX tidak mengirimkan token CSRF yang sesuai, Django akan menolak permintaan tersebut. Jika kita tidak ingin menangani CSRF dalam permintaan tertentu (misalnya untuk endpoint API yang hanya digunakan di dalam aplikasi kita sendiri), kita dapat menggunakan @csrf_exempt agar Django tidak memeriksa token CSRF pada view tersebut.
+    - Ada situasi di mana klien eksternal, seperti layanan pihak ketiga atau aplikasi lain, tidak mendukung atau tidak dapat mengirimkan token CSRF yang diperlukan oleh Django. Dalam kasus ini, menggunakan @csrf_exempt memungkinkan view kita untuk menerima permintaan meskipun tidak ada token CSRF yang valid.
+
+
+4. **Pada tutorial PBP minggu ini, pembersihan data input pengguna dilakukan di belakang (backend) juga. Mengapa hal tersebut tidak dilakukan di frontend saja?**
+    
+    **Jawab**
+
+    Validasi dan pembersihan di backend sangat penting karena frontend (client-side) dapat dimanipulasi oleh pengguna. Jika validasi hanya dilakukan di frontend, pengguna yang jahat (malicious user) dapat dengan mudah memodifikasi atau menonaktifkan skrip JavaScript di browser dan mengirim data yang berbahaya langsung ke server
+    
+    Validasi di frontend biasanya dilakukan dengan JavaScript atau HTML5, yang meskipun efektif dalam memberikan umpan balik langsung kepada pengguna, memiliki keterbatasan. Beberapa jenis validasi, seperti pemeriksaan unik di database, pemastian referensi antar data (misalnya foreign key), atau validasi kompleks, hanya bisa dilakukan di backend yang memiliki akses penuh ke data di server.
+5. **Jelaskan bagaimana cara kamu mengimplementasikan checklist di atas secara step-by-step (bukan hanya sekadar mengikuti tutorial)!**
+
+    **Jawab**
+
+
+
 
 ## Checklist Tugas
 - [x] Mengubah tugas 5 yang telah dibuat sebelumnya menjadi menggunakan AJAX.
@@ -1335,4 +1376,5 @@ Tautan aplikasi PWS: [http://anthony-edbert-ayobelanja.pbp.cs.ui.ac.id](http://a
   - [x]  Jelaskan fungsi dari penggunaan `await` ketika kita menggunakan `fetch()`! Apa yang akan terjadi jika kita tidak menggunakan `await`?
   - [x]  Mengapa kita perlu menggunakan decorator `csrf_exempt` pada view yang akan digunakan untuk AJAX `POST`?
   - [x] Pada tutorial PBP minggu ini, pembersihan data input pengguna dilakukan di belakang (backend) juga. Mengapa hal tersebut tidak dilakukan di frontend saja?
+  - [x] Jelaskan bagaimana cara kamu mengimplementasikan checklist di atas secara step-by-step (bukan hanya sekadar mengikuti tutorial)!
 - [x] Melakukan `add`-`commit`-`push` ke GitHub.
