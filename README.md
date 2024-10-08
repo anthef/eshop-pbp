@@ -17,7 +17,7 @@ Kelas   : PBP C
 
 ## Deployment
 
-Tautan aplikasi PWS: [http://anthony-edbert-ayobelanja.pbp.cs.ui.ac.id](http://anthony-edbert-eshoppbp.pbp.cs.ui.ac.id)
+Tautan aplikasi PWS: [http://anthony-edbert-ayobelanja.pbp.cs.ui.ac.id](http://anthony-edbert-ayobelanja.pbp.cs.ui.ac.id)
 
 # Tugas 2
 ## Pertanyaan dan Jawaban
