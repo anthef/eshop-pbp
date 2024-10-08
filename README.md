@@ -1351,11 +1351,344 @@ Tautan aplikasi PWS: [http://anthony-edbert-ayobelanja.pbp.cs.ui.ac.id](http://a
     **Jawab**
 
     Validasi dan pembersihan di backend sangat penting karena frontend (client-side) dapat dimanipulasi oleh pengguna. Jika validasi hanya dilakukan di frontend, pengguna yang jahat (malicious user) dapat dengan mudah memodifikasi atau menonaktifkan skrip JavaScript di browser dan mengirim data yang berbahaya langsung ke server
-    
+
     Validasi di frontend biasanya dilakukan dengan JavaScript atau HTML5, yang meskipun efektif dalam memberikan umpan balik langsung kepada pengguna, memiliki keterbatasan. Beberapa jenis validasi, seperti pemeriksaan unik di database, pemastian referensi antar data (misalnya foreign key), atau validasi kompleks, hanya bisa dilakukan di backend yang memiliki akses penuh ke data di server.
+
 5. **Jelaskan bagaimana cara kamu mengimplementasikan checklist di atas secara step-by-step (bukan hanya sekadar mengikuti tutorial)!**
 
     **Jawab**
+    1. Membuat function add product entry by ajax yang berbeda dari add product yang lainnya.
+    ```python
+    @login_required(login_url='/login')
+    @require_POST
+    def add_product_entry_ajax(request):
+        try:
+            data = json.loads(request.body)
+            form = ProductEntryForm(data)
+            if form.is_valid():
+                product = form.save(commit=False)
+                product.user = request.user  
+                product.save()
+                product_data = {
+                    'pk': product.id,
+                    'fields': {
+                        'name': product.name,
+                        'price': product.price,
+                        'description': product.description,
+                        'time': product.time.strftime('%Y-%m-%d'),
+                    }
+                }
+                return JsonResponse(product_data, status=201)
+            else:
+                return JsonResponse({'error': form.errors}, status=400)
+        except json.JSONDecodeError:
+            return JsonResponse({'error': 'Invalid JSON'}, status=400)
+        except Exception as e:
+            return JsonResponse({'error': str(e)}, status=500)
+    ```
+    2. Melakukan routing kembali pada `urls.py` untuk function pada step 1
+    ```python
+    path('add-product-ajax/', add_product_entry_ajax, name='add_product_entry_ajax'),
+    ```
+    3. Menambahkan `strip_tags` untuk pencegahan xss dan clean input setelah seseorang selesai melakukan input pada forms
+    ```python
+        def clean_name(self):
+        name = self.cleaned_data["name"]
+        name = strip_tags(name)
+        if not name:
+            raise ValidationError("Product name cannot be empty.")
+        return name
+
+    def clean_price(self):
+        price = self.cleaned_data["price"]
+        if price < 0:
+            raise ValidationError("Price cannot be negative.")
+        return price
+    
+    def clean_description(self):
+        description = self.cleaned_data["description"]
+        description = strip_tags(description)
+        return description
+    ```
+
+    4. Menambahkan script source untuk dompurify
+    ```html
+    <script src="https://cdn.jsdelivr.net/npm/dompurify@3.1.7/dist/purify.min.js"></script>
+    ```
+
+    5. Menambahkan div untuk pembuatan modal/popup yang nantinya terintegrasi dengan function javascript
+    ```html
+     <div id="product_entry_cards" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6"></div>
+    ```
+
+    6. Membuat modal yang nantinya akan ter pop apbila melakukan klik pada suatu button
+    ```html
+    <div id="crudModal" tabindex="-1" aria-hidden="true" class="hidden fixed inset-0 z-50 w-full flex items-center justify-center bg-gray-800 bg-opacity-50 overflow-x-hidden overflow-y-auto transition-opacity duration-300 ease-out">
+        <div id="crudModalContent" class="relative bg-white rounded-lg shadow-lg w-5/6 sm:w-3/4 md:w-1/2 lg:w-1/3 mx-4 sm:mx-0 transform scale-95 opacity-0 transition-transform transition-opacity duration-300 ease-out">
+
+            <div class="flex items-center justify-between p-4 border-b rounded-t">
+                <h3 class="text-xl font-semibold text-gray-700">Add New Product</h3>
+                <button type="button" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center" id="closeModalBtn">
+                    <svg aria-hidden="true" class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                        <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path>
+                    </svg>
+                    <span class="sr-only">Close modal</span>
+                </button>
+            </div>
+            
+            <div class="px-6 py-4 space-y-6">
+                <form id="productEntryForm">
+                    {% csrf_token %}
+                    <div class="mb-4">
+                        <label for="name" class="block text-sm font-medium text-gray-700">Product Name</label>
+                        <input type="text" id="name" name="name" class="mt-1 block w-full border border-gray-300 rounded-md p-2 hover:border-indigo-700" placeholder="Enter product name" required>
+                    </div>
+                    <div class="mb-4">
+                        <label for="price" class="block text-sm font-medium text-gray-700">Price ($)</label>
+                        <input type="number" id="price" name="price" min="0" class="mt-1 block w-full border border-gray-300 rounded-md p-2 hover:border-indigo-700" placeholder="Enter product price" required>
+                    </div>
+                    <div class="mb-4">
+                        <label for="description" class="block text-sm font-medium text-gray-700">Description</label>
+                        <textarea id="description" name="description" rows="3" class="mt-1 block w-full h-32 resize-none border border-gray-300 rounded-md p-2 hover:border-indigo-700" placeholder="Enter product description" required></textarea>
+                    </div>
+          
+                    <div id="formError" class="text-red-500 text-sm hidden"></div>
+                </form>
+            </div>
+        
+       
+            <div class="flex flex-col space-y-2 md:flex-row md:space-y-0 md:space-x-2 p-6 border-t border-gray-200 rounded-b justify-center md:justify-end">
+                <button type="button" class="bg-gray-500 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded-lg" id="cancelButton">Cancel</button>
+                <button type="submit" id="submitProductEntry" form="productEntryForm" class="bg-indigo-700 hover:bg-indigo-600 text-white font-bold py-2 px-4 rounded-lg">Save</button>
+            </div>
+        </div>
+    </div>
+    ```
+
+    7. Membuat 2 button untuk memisahkan penggunaan modal dan `create_name_entry.html`
+    ```html
+    
+    <div class="mt-8 space-x-4 text-center">
+        <button data-modal-target="crudModal" data-modal-toggle="crudModal" class="btn bg-indigo-700 hover:bg-indigo-600 text-white font-bold py-3 px-6 rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 ease-in-out transform hover:-translate-y-1" onclick="showModal();">
+            Add New Product Entry by AJAX
+        </button>
+        <a href="{% url 'main:create_name_entry' %}" class="btn inline-block bg-indigo-700 hover:bg-indigo-600 text-white font-bold py-3 px-6 rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 ease-in-out transform hover:-translate-y-1">
+            Create Product
+        </a>
+    </div>
+    ```
+
+    8. Membuat getCSRFtoken
+    ```python
+        function getCSRFToken() {
+        const csrfTokenInput = document.querySelector('#productEntryForm input[name="csrfmiddlewaretoken"]');
+        if (csrfTokenInput) {
+            return csrfTokenInput.value;
+        } else {
+            console.error("CSRF token not found!");
+            return '';
+        }
+    }
+    ```
+    9. Membuat inisiasi id dan function untuk edit dan delete product
+    ```python
+        const editProductBaseURL = "{% url 'main:edit_product' '00000000-0000-0000-0000-000000000000' %}";
+    const deleteProductBaseURL = "{% url 'main:delete_product' '00000000-0000-0000-0000-000000000000' %}";
+
+    function getEditProductURL(id) {
+        return editProductBaseURL.replace('00000000-0000-0000-0000-000000000000', id);
+    }
+
+    function getDeleteProductURL(id) {
+        return deleteProductBaseURL.replace('00000000-0000-0000-0000-000000000000', id);
+    }
+    ```
+
+    10. Membuat get product entries
+    ```python
+    async function getProductEntries(){
+        try {
+            const response = await fetch("{% url 'main:show_json' %}", {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-Requested-With': 'XMLHttpRequest'  
+                }
+            });
+            if (!response.ok) throw new Error('Network response was not ok');
+            const data = await response.json();
+            return data;
+        } catch (error) {
+            console.error('Error fetching product entries:', error);
+            return [];
+        }
+    }
+    ```
+
+    10. Membuat render product card untuk menampilkan card yang sudah dibuat dari hasil ajax
+    ```python
+    function renderProductCard(product) {
+        const name = DOMPurify.sanitize(product.fields.name);
+        const price = parseFloat(DOMPurify.sanitize(product.fields.price));
+        const description = DOMPurify.sanitize(product.fields.description);
+        const time = new Date(product.fields.time).toLocaleDateString();
+        const id = product.pk;
+        const imageUrl = 'https://via.placeholder.com/300x200'; 
+
+        return `
+        <div class="max-w-sm rounded overflow-hidden shadow-lg bg-white hover:shadow-xl transition-shadow duration-300 ease-in-out flex flex-col">
+            <img class="w-full h-48 object-cover object-center" src="${imageUrl}" alt="${name}">
+            <div class="px-6 py-4 flex-grow">
+                <div class="font-bold text-xl mb-2 text-gray-800">${name}</div>
+                <p class="text-gray-600 text-sm mb-2">Added: ${time}</p>
+                <p class="text-gray-700 text-base mb-4">${description.length > 100 ? description.substring(0, 100) + '...' : description}</p>
+                <div class="flex items-center justify-between mb-4">
+                    <span class="text-xl font-bold text-indigo-600">$${price.toFixed(2)}</span>
+                </div>
+            </div>
+            <div class="flex justify-center space-x-4 mb-4">
+                <a href="${getEditProductURL(id)}" class="bg-yellow-500 hover:bg-yellow-600 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline transition duration-300 ease-in-out transform hover:-translate-y-1 hover:scale-105">
+                    Edit
+                </a>
+                <a href="${getDeleteProductURL(id)}" class="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline transition duration-300 ease-in-out transform hover:-translate-y-1 hover:scale-105">
+                    Delete
+                </a>
+            </div>
+        </div>
+        `;
+    }
+    ```
+
+    11. Melakukan refresh product secara asynchronus
+    ```python
+    async function refreshProductEntries() {
+        const productContainer = document.getElementById("product_entry_cards");
+        productContainer.innerHTML = ""; 
+
+        const productEntries = await getProductEntries();
+        
+        if (productEntries.length === 0) {
+            productContainer.innerHTML = `
+            <div class="col-span-full flex flex-col items-center justify-center">
+                <img src="{% static 'image/no-product.png' %}" alt="Sad face" class="w-32 h-32 mb-4"/>
+                <p class="text-center text-gray-600 mt-4">Belum ada product pada Ayo Belanja.</p>
+            </div>
+            `;
+            return;
+        }
+
+        else {
+            productEntries.forEach((product) => {
+                productContainer.innerHTML += renderProductCard(product);
+            });
+        }
+    }
+    ```
+
+    12. Melakukan penambahan/add product entry
+    ```python
+        async function addProductEntry() {
+        const form = document.getElementById("productEntryForm");
+        if (!form) {
+            console.error("Form with id 'productEntryForm' not found!");
+            return;
+        }
+
+        const nameInput = form.querySelector('input[name="name"]');
+        const priceInput = form.querySelector('input[name="price"]');
+        const descriptionInput = form.querySelector('textarea[name="description"]');
+        const errorContainer = document.getElementById("formError");
+
+        if (!nameInput || !priceInput || !descriptionInput) {
+            console.error("One or more form inputs not found!");
+            return;
+        }
+
+        const name = DOMPurify.sanitize(nameInput.value.trim());
+        const price = parseFloat(DOMPurify.sanitize(priceInput.value.trim()));
+        const description = DOMPurify.sanitize(descriptionInput.value.trim());
+
+        errorContainer.classList.add('hidden');
+        errorContainer.innerText = '';
+
+        if (!name || isNaN(price) || !description) {
+            errorContainer.innerText = "All fields are required and price must be a number!";
+            errorContainer.classList.remove('hidden');
+            return;
+        }
+
+        const data = {
+            name: name,
+            price: price,
+            description: description,
+        };
+
+        try {
+            const response = await fetch("{% url 'main:add_product_entry_ajax' %}", {
+                method: "POST",
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': getCSRFToken(),
+                    'X-Requested-With': 'XMLHttpRequest'  
+                },
+                body: JSON.stringify(data)
+            });
+
+            if (!response.ok) {
+                const errorData = await response.json();
+                throw new Error(Object.values(errorData.error).flat().join(', ') || 'Network response was not ok');
+            }
+
+            const newProduct = await response.json();
+
+            const productContainer = document.getElementById("product_entry_cards");
+            productContainer.innerHTML += renderProductCard(newProduct);
+
+            hideModal();
+            form.reset();
+        } catch (error) {
+            console.error('Error adding product entry:', error);
+            errorContainer.innerText = error.message;
+            errorContainer.classList.remove('hidden');
+        }
+    }
+    ```
+
+    13. Membuat function untuk menampilkan ataupun menyembunyikan modal
+    ```python
+       document.addEventListener('DOMContentLoaded', () => {
+        refreshProductEntries();
+    });
+
+    const modal = document.getElementById('crudModal');
+    const modalContent = document.getElementById('crudModalContent');
+
+    function showModal() {
+        modal.classList.remove('hidden'); 
+        setTimeout(() => {
+            modalContent.classList.remove('opacity-0', 'scale-95');
+            modalContent.classList.add('opacity-100', 'scale-100');
+        }, 50); 
+    }
+
+    function hideModal() {
+        modalContent.classList.remove('opacity-100', 'scale-100');
+        modalContent.classList.add('opacity-0', 'scale-95');
+
+        setTimeout(() => {
+            modal.classList.add('hidden');
+        }, 150); 
+    }
+
+    document.getElementById("cancelButton").addEventListener("click", hideModal);
+    document.getElementById("closeModalBtn").addEventListener("click", hideModal);
+
+    document.getElementById("productEntryForm").addEventListener("submit", (e) => {
+        e.preventDefault();
+        addProductEntry();
+    });
+    ```
+
 
 
 

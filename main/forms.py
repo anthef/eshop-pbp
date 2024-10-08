@@ -1,4 +1,3 @@
-# main/forms.py
 from django.forms import ModelForm
 from .models import ProductEntry
 from django.core.exceptions import ValidationError
