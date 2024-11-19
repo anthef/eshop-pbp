@@ -7,3 +7,4 @@ urllib3
 Pillow
 django-widget-tweaks
 csp
+django-cors-headers

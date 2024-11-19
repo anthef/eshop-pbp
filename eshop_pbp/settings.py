@@ -27,7 +27,7 @@ SECRET_KEY = 'django-insecure-#uac#ezk2b)n$nynxk+4dbcb)vesbt=i76gdvs^pbke4*#(-%u
 PRODUCTION = os.getenv("PRODUCTION", False)
 DEBUG = not PRODUCTION
 
-ALLOWED_HOSTS = ["localhost", "127.0.0.1",'anthony-edbert-ayobelanja.pbp.cs.ui.ac.id']
+ALLOWED_HOSTS = ["127.0.0.1",'anthony-edbert-ayobelanja.pbp.cs.ui.ac.id',"10.0.2.2","localhost"]
 
 
 # Application definition
@@ -41,6 +41,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'main',
     'widget_tweaks',
+    'authentication',
+    'corsheaders',
     # 'csp'
 ]
 
@@ -54,6 +56,7 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     # 'csp.middleware.CSPMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
 ]
 
 ROOT_URLCONF = 'eshop_pbp.urls'
@@ -117,6 +120,13 @@ TIME_ZONE = 'UTC'
 USE_I18N = True
 
 USE_TZ = True
+
+CORS_ALLOW_ALL_ORIGINS = True
+CORS_ALLOW_CREDENTIALS = True
+CSRF_COOKIE_SECURE = True
+SESSION_COOKIE_SECURE = True
+CSRF_COOKIE_SAMESITE = 'None'
+SESSION_COOKIE_SAMESITE = 'None'
 
 
 # Static files (CSS, JavaScript, Images)
